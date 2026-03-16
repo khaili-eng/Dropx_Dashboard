@@ -123,17 +123,7 @@ lib/core/utils/dummy_data.dart
 * Reports
 * Cities
 
-مثال:
 
-```dart
-List<Driver> drivers = [
-  Driver(
-    id: 1,
-    name: "John Doe",
-    phone: "0912345678",
-  ),
-];
-```
 
 ---
 
@@ -201,15 +191,7 @@ GET /api/admin/driver/getDriverMonthlyReport/{driver_id}/{year}/{month}
 
 ---
 
-## ⚙️ Setup Instructions
 
-### 1️⃣ Clone Repository
-
-```
-git clone REPOSITORY_URL
-```
-
----
 
 ### 2️⃣ Install Dependencies
 
@@ -222,7 +204,10 @@ flutter pub get
 ### 3️⃣ Run Project
 
 ```
+## How to run:
+flutter pub get
 flutter run
+
 ```
 
 ---
@@ -240,6 +225,3 @@ flutter run
 
 Maadati Development Team
 
-## How to run:
-flutter pub get
-flutter run
