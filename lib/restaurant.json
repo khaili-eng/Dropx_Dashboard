@@ -1,0 +1,885 @@
+
+			{"name": "Admin_restaurant",
+			"item": [
+				{
+					"name": "resturantcallection",
+					"item": [
+						{
+							"name": "storeresturant",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "5|r2j9chpefS3Y5zi9J2jO21sEbEghAKyKfppjWrLo844f65d0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "fullname",
+											"value": "الحبايب ",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "0995965231",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123123123",
+											"type": "text"
+										},
+										{
+											"key": "city",
+											"value": "فلسطين",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "نايس انت",
+											"type": "text"
+										},
+										{
+											"key": "working_hours_start",
+											"value": "09:00",
+											"type": "text"
+										},
+										{
+											"key": "working_hours_end",
+											"value": "22:00",
+											"type": "text"
+										},
+										{
+											"key": "commission_type",
+											"value": "fixed",
+											"type": "text"
+										},
+										{
+											"key": "commission_value",
+											"value": "2000",
+											"type": "text"
+										},
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/HP/Pictures/m3.bmp"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/resturant/storeresturant",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"resturant",
+										"storeresturant"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "resetRestaurantPassword",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "5|r2j9chpefS3Y5zi9J2jO21sEbEghAKyKfppjWrLo844f65d0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"new_password\":\"1234554321\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/driverandresturant/resetRestaurantPassword/11",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"driverandresturant",
+										"resetRestaurantPassword",
+										"11"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update resturant",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "5|r2j9chpefS3Y5zi9J2jO21sEbEghAKyKfppjWrLo844f65d0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "fullname",
+											"value": "مطعم الشرقيات",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "0998766410",
+											"type": "text"
+										},
+										{
+											"key": "city",
+											"value": "فلسطين",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "انت اولا احد ",
+											"type": "text"
+										},
+										{
+											"key": "commission_type",
+											"value": "fixed",
+											"type": "text"
+										},
+										{
+											"key": "commission_value",
+											"value": "200000",
+											"type": "text"
+										},
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/HP/Pictures/FB_IMG_1622004207402.jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/resturant/updateRestaurant/11",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"resturant",
+										"updateRestaurant",
+										"11"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getAllRestaurants",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "5|r2j9chpefS3Y5zi9J2jO21sEbEghAKyKfppjWrLo844f65d0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"fullname\": \"مطعم الأرز اللبناني\",\r\n  \"phone\": \"0934567890\",\r\n  \"city\": \"دمشق\",\r\n  \"description\": \"مطعم يقدم وجبات شرقية وغربية\",\r\n  \"commission_type\": \"fixed\",\r\n  \"commission_value\": 15.00,\r\n  \"image\": \"restaurants/images/12345.png\"\r\n}\r\n"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/resturant/getAllRestaurants",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"resturant",
+										"getAllRestaurants"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getRestaurantsByCity",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "5|r2j9chpefS3Y5zi9J2jO21sEbEghAKyKfppjWrLo844f65d0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/resturant/getRestaurantsByCity/فلسطين",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"resturant",
+										"getRestaurantsByCity",
+										"فلسطين"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getRestaurantDetailsWithMeals",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "5|r2j9chpefS3Y5zi9J2jO21sEbEghAKyKfppjWrLo844f65d0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/resturant/getRestaurantDetailsWithMeals/6",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"resturant",
+										"getRestaurantDetailsWithMeals",
+										"6"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getDeliveredOrdersByDayForresturant",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "5|r2j9chpefS3Y5zi9J2jO21sEbEghAKyKfppjWrLo844f65d0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/resturant/getDeliveredOrdersByDayForresturant/6/2025/5/18",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"resturant",
+										"getDeliveredOrdersByDayForresturant",
+										"6",
+										"2025",
+										"5",
+										"18"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getDeliveredOrdersByMonthForRestaurant",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "5|r2j9chpefS3Y5zi9J2jO21sEbEghAKyKfppjWrLo844f65d0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/resturant/getDeliveredOrdersForRestaurantByMonth/6/2025/5",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"resturant",
+										"getDeliveredOrdersForRestaurantByMonth",
+										"6",
+										"2025",
+										"5"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getRestaurantDailyReport",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "5|r2j9chpefS3Y5zi9J2jO21sEbEghAKyKfppjWrLo844f65d0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/resturant/getRestaurantDailyReport/6/2025/6/22",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"resturant",
+										"getRestaurantDailyReport",
+										"6",
+										"2025",
+										"6",
+										"22"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getRestaurantMonthlyReport",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "5|r2j9chpefS3Y5zi9J2jO21sEbEghAKyKfppjWrLo844f65d0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/resturant/getRestaurantMonthlyReport/6/2025/6",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"resturant",
+										"getRestaurantMonthlyReport",
+										"6",
+										"2025",
+										"6"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getRestaurantOrdersByStatus",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "5|r2j9chpefS3Y5zi9J2jO21sEbEghAKyKfppjWrLo844f65d0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"status\":\"delivered\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/resturant/getRestaurantOrdersByStatus/7",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"resturant",
+										"getRestaurantOrdersByStatus",
+										"7"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "addcommission",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "5|jZ5VG2FxtbFiPKaAIJI35RAyqAiFeIhniGt7qndAd6752258",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"type\":\"percentage\",\r\n    \"value\":20\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/restaurant/addcommission/5",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"restaurant",
+										"addcommission",
+										"5"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "updatecommission",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "5|r2j9chpefS3Y5zi9J2jO21sEbEghAKyKfppjWrLo844f65d0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"type\":\"fixed\",\r\n    \"value\":50000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/restaurant/updatecommission/7",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"restaurant",
+										"updatecommission",
+										"7"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "addMealToRestaurant",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "5|r2j9chpefS3Y5zi9J2jO21sEbEghAKyKfppjWrLo844f65d0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "شاورما دجاج ",
+											"type": "text"
+										},
+										{
+											"key": "original_price",
+											"value": "15000",
+											"type": "text"
+										},
+										{
+											"key": "category_name",
+											"value": "شرقي",
+											"type": "text"
+										},
+										{
+											"key": "images[]",
+											"type": "file",
+											"src": "/C:/Users/HP/Pictures/m3.bmp"
+										},
+										{
+											"key": "images[]",
+											"type": "file",
+											"src": "/C:/Users/HP/Pictures/FB_IMG_1622004192472.jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/meal/AddMeal/11",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"meal",
+										"AddMeal",
+										"11"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "updateMeal",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "5|r2j9chpefS3Y5zi9J2jO21sEbEghAKyKfppjWrLo844f65d0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "_method",
+										"value": "put",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "شاورما لحم ",
+											"type": "text"
+										},
+										{
+											"key": "images[]",
+											"type": "file",
+											"src": "/C:/Users/HP/Pictures/FB_IMG_16871545271511.jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/meal/updateMeal/30",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"meal",
+										"updateMeal",
+										"30"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteMeal",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "5|r2j9chpefS3Y5zi9J2jO21sEbEghAKyKfppjWrLo844f65d0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/meal/deleteMeal/30",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"meal",
+										"deleteMeal",
+										"30"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "updateDeliverySettings",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "5|r2j9chpefS3Y5zi9J2jO21sEbEghAKyKfppjWrLo844f65d0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"price_per_km\":10000,\r\n    \"minimum_delivery_fee\":15000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/admin/restaurant/updateDeliverySettings",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"restaurant",
+								"updateDeliverySettings"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
