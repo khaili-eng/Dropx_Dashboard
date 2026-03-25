@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 import '../constants/app_color/app_color.dart';
@@ -18,8 +16,8 @@ class _SideDrawerState extends State<SideDrawer> {
   @override
   void initState() {
     super.initState();
-    switch(widget.currentRoute){
-      case AppRoute.dashboard:
+    switch (widget.currentRoute) {
+      case AppRoute.overview:
         selectedIndex = 0;
         break;
       case AppRoute.customers:
@@ -32,28 +30,27 @@ class _SideDrawerState extends State<SideDrawer> {
         selectedIndex = 3;
         break;
       case AppRoute.orders:
-        selectedIndex=4;
+        selectedIndex = 4;
         break;
       case AppRoute.promoCode:
-        selectedIndex=5;
+        selectedIndex = 5;
         break;
       case AppRoute.fees:
-        selectedIndex=6;
+        selectedIndex = 6;
         break;
       case AppRoute.reports:
-        selectedIndex=7;
+        selectedIndex = 7;
         break;
       case AppRoute.settings:
-        selectedIndex=8;
+        selectedIndex = 8;
         break;
     }
   }
+
   void changePage(int index) {
-
     switch (index) {
-
       case 0:
-        Navigator.pushReplacementNamed(context, AppRoute.dashboard);
+        Navigator.pushReplacementNamed(context, AppRoute.overview);
         break;
 
       case 1:
@@ -85,8 +82,8 @@ class _SideDrawerState extends State<SideDrawer> {
         Navigator.pushReplacementNamed(context, AppRoute.settings);
         break;
     }
-
   }
+
   int selectedIndex = 0;
   List<String> drawerItems = [
     'Dashboard',
@@ -98,7 +95,7 @@ class _SideDrawerState extends State<SideDrawer> {
     'PromoCode',
     'Fees',
     'Reports',
-    'Settings'
+    'Settings',
   ];
 
   List<IconData> drawerIcons = [
@@ -109,9 +106,9 @@ class _SideDrawerState extends State<SideDrawer> {
     Icons.delivery_dining,
     Icons.card_travel_outlined,
     Icons.local_offer,
-    Icons.attach_money,
     Icons.bar_chart,
-    Icons.settings
+    Icons.attach_money,
+    Icons.settings,
   ];
 
   void onItemTapped(int index) {
@@ -122,7 +119,6 @@ class _SideDrawerState extends State<SideDrawer> {
 
   @override
   Widget build(BuildContext context) {
-
     return Drawer(
       elevation: 0,
       child: Container(
@@ -143,12 +139,11 @@ class _SideDrawerState extends State<SideDrawer> {
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: AppColor.color4
+                    color: AppColor.color4,
                   ),
                 ),
               ),
               ...List.generate(drawerItems.length, (index) {
-
                 bool isSelected = selectedIndex == index;
 
                 return GestureDetector(
@@ -168,25 +163,23 @@ class _SideDrawerState extends State<SideDrawer> {
                       vertical: 20,
                     ),
                     decoration: BoxDecoration(
-                      color: isSelected
-                          ? AppColor.color2.withOpacity(0.15)
-                          : Colors.transparent,
+                      color:
+                          isSelected
+                              ? AppColor.color2.withOpacity(0.15)
+                              : Colors.transparent,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Row(
                       children: [
                         Icon(
                           drawerIcons[index],
-                          color: isSelected
-                              ? AppColor.color4
-                              : Colors.grey,
+                          color: isSelected ? AppColor.color4 : Colors.grey,
                         ),
                       ],
                     ),
                   ),
                 );
               }),
-
             ],
           ),
         ),

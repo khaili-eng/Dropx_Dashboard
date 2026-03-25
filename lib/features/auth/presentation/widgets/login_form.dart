@@ -33,19 +33,16 @@ class _LoginFormState extends State<LoginForm> {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text(state.authResponse.message))
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.authResponse.message)));
           Navigator.pushReplacementNamed(context, AppRoute.dashboard);
         }
 
         if (state is AuthFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-            ),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message)));
         }
       },
       builder: (context, state) {
@@ -56,20 +53,19 @@ class _LoginFormState extends State<LoginForm> {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                  onPressed: (){
-                    final localeCubit = context.read<LocaleCubit>();
-                    if (localeCubit.currentLocale.languageCode == 'ar') {
-                      localeCubit.changeLanguage('en');
-                    } else {
-                      localeCubit.changeLanguage('ar');
-                    }
-                  },
-                  icon: Icon(Icons.language,color: AppColor.color4,),
-                 
-                    ),
-               SizedBox(height: 35,),
-               Text(
-          context.read<LocaleCubit>().translate('bb'),
+                onPressed: () {
+                  final localeCubit = context.read<LocaleCubit>();
+                  if (localeCubit.currentLocale.languageCode == 'ar') {
+                    localeCubit.changeLanguage('en');
+                  } else {
+                    localeCubit.changeLanguage('ar');
+                  }
+                },
+                icon: Icon(Icons.language, color: AppColor.color4),
+              ),
+              SizedBox(height: 35),
+              Text(
+                context.read<LocaleCubit>().translate('bb'),
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
@@ -77,22 +73,18 @@ class _LoginFormState extends State<LoginForm> {
                 ),
               ),
               const SizedBox(height: 6),
-               Text(
-               context.watch<LocaleCubit>().translate('aa'),
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w300,
-
-                ),
+              Text(
+                context.watch<LocaleCubit>().translate('aa'),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
               ),
               const SizedBox(height: 32),
               TextFormField(
                 controller: phoneNumberController,
                 keyboardType: TextInputType.phone,
-                decoration:  InputDecoration(
+                decoration: InputDecoration(
                   labelText: context.watch<LocaleCubit>().translate('cc'),
                   hintText: "09xxxxxxxx",
-                  prefixIcon: Icon(Icons.phone,color: AppColor.color4,),
+                  prefixIcon: Icon(Icons.phone, color: AppColor.color4),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -111,12 +103,10 @@ class _LoginFormState extends State<LoginForm> {
                 decoration: InputDecoration(
                   labelText: context.read<LocaleCubit>().translate('dd'),
                   hintText: "********",
-                  prefixIcon:  Icon(Icons.lock,color: AppColor.color4,),
+                  prefixIcon: Icon(Icons.lock, color: AppColor.color4),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      obscurePassword
-                          ? Icons.visibility
-                          : Icons.visibility_off,
+                      obscurePassword ? Icons.visibility : Icons.visibility_off,
                       color: AppColor.color4,
                     ),
                     onPressed: () {
@@ -136,37 +126,37 @@ class _LoginFormState extends State<LoginForm> {
               const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
-                child: state is AuthLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : ElevatedButton(
-
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            context.read<AuthCubit>().login(
-                                  phone: phoneNumberController.text.trim(),
-                                  password: passwordController.text.trim(),
-                                );
-                          }
-                        },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColor.color4,
-
-                  ),
-                        child:  Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.login,color: AppColor.color1,),
-                            SizedBox(width: 5,),
-                            Text(context.watch<LocaleCubit>().translate('login'),
-                              style: TextStyle(
-                              color: AppColor.color1,
-                              fontSize: 16
-                            ),),
-                          ],
+                child:
+                    state is AuthLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              context.read<AuthCubit>().login(
+                                phone: phoneNumberController.text.trim(),
+                                password: passwordController.text.trim(),
+                              );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColor.color4,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.login, color: AppColor.color1),
+                              SizedBox(width: 5),
+                              Text(
+                                context.watch<LocaleCubit>().translate('login'),
+                                style: TextStyle(
+                                  color: AppColor.color1,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
               ),
-
             ],
           ),
         );

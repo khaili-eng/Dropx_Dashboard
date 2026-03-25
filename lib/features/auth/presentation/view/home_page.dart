@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:maadati/core/constants/app_color/app_color.dart';
 import 'package:maadati/features/auth/presentation/view/Restaurant_Category.dart';
 import 'package:maadati/features/auth/presentation/view/analis_page.dart';
+import 'package:maadati/features/auth/presentation/view/order_page.dart';
 
-import 'package:maadati/features/auth/presentation/view/order_page.dart'
-    hide AppColor;
 import 'package:maadati/features/auth/presentation/view/overview_page.dart';
 
 class HomePage extends StatefulWidget {

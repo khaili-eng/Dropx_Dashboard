@@ -26,10 +26,8 @@ class _HeaderState extends State<Header> {
 
     debounce = Timer(const Duration(milliseconds: 800), () {
       if (query.trim().isNotEmpty) {
-        // نطلب من الكيوبيت جلب مطاعم المدينة
         context.read<RestaurantCubit>().getRestaurantsByCity(query.trim());
       } else if (query.isEmpty && isSearching) {
-        // إذا مسح المستخدم النص نرجع نعرض كل المطاعم
         context.read<RestaurantCubit>().getAllRestaurants();
       }
     });
@@ -100,7 +98,6 @@ class _HeaderState extends State<Header> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // --- حقل البحث العلوي ---
         AnimatedContainer(
           duration: const Duration(milliseconds: 400),
           curve: Curves.easeInOutBack,
@@ -224,7 +221,6 @@ class _HeaderState extends State<Header> {
           ),
         ),
 
-        // --- عرض النتائج هنا عند البحث ---
         if (isSearching)
           BlocBuilder<RestaurantCubit, RestaurantState>(
             builder: (context, state) {
@@ -242,7 +238,6 @@ class _HeaderState extends State<Header> {
                     child: Text("No restaurants found in this city."),
                   );
                 }
-                // هنا بنمرر الداتا اللي رجعت من البحث للـ GridSection
                 return Padding(
                   padding: const EdgeInsets.only(top: 16.0),
                   child: GridSection(restaurants: state.restaurants),

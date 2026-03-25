@@ -15,8 +15,11 @@ class GridSection extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: restaurants.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount:
+            MediaQuery.of(context).size.width > 1200
+                ? 4
+                : (MediaQuery.of(context).size.width > 800 ? 3 : 2),
         crossAxisSpacing: 15,
         mainAxisSpacing: 15,
         childAspectRatio: 0.85,

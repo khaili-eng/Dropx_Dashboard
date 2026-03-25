@@ -1,101 +1,155 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:maadati/core/constants/app_color/app_color.dart';
+import 'package:maadati/core/constants/app_route/app_route.dart';
+import 'package:maadati/core/responsive/responsive.dart';
+import 'package:maadati/core/widgets/side_drawer.dart';
 
 class ReportsPage extends StatelessWidget {
   const ReportsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> drawerKey = GlobalKey();
+
     return Scaffold(
-      backgroundColor: AppColor.color1,
-      appBar: AppBar(
-        title: const Text(
-          'Business Analytics',
-          style: TextStyle(
-            color: AppColor.color4,
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.filter_list, color: AppColor.color4),
-            onPressed: () {},
-          ),
-        ],
+      key: drawerKey,
+      backgroundColor: Colors.white,
+      drawer: SizedBox(
+        width: 100,
+        child: SideDrawer(currentRoute: AppRoute.reports),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Column(
+      appBar:
+          !Responsive.isDesktop(context)
+              ? AppBar(
+                elevation: 0,
+                backgroundColor: Colors.white,
+                leading: IconButton(
+                  onPressed: () => drawerKey.currentState!.openDrawer(),
+                  icon: const Icon(Icons.menu, color: AppColor.color4),
+                ),
+                title: const Text(
+                  "Analytics",
+                  style: TextStyle(color: Colors.black, fontSize: 18),
+                ),
+              )
+              : const PreferredSize(
+                preferredSize: Size.zero,
+                child: SizedBox(),
+              ),
+      body: SafeArea(
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildSectionTitle("Daily Insights"),
-            const SizedBox(height: 15),
-            Row(
-              children: [
-                _buildPremiumStatCard(
-                  "Orders",
-                  "1,240",
-                  Icons.local_shipping,
-                  AppColor.color4,
-                ),
-                const SizedBox(width: 15),
-                _buildPremiumStatCard(
-                  "Revenue",
-                  "\$12.5k",
-                  Icons.payments,
-                  Colors.brown,
-                ),
-              ],
-            ),
-            const SizedBox(height: 25),
+            if (Responsive.isDesktop(context))
+              const Expanded(
+                flex: 1,
+                child: SideDrawer(currentRoute: AppRoute.reports),
+              ),
 
-            _buildSectionTitle("Sales Performance"),
-            const SizedBox(height: 15),
-            _buildChartContainer(
-              height: 250,
-              child: LineChart(_mainSalesData()),
-            ),
-            const SizedBox(height: 25),
+            Expanded(
+              flex: 10,
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(
+                  horizontal: Responsive.isMobile(context) ? 20 : 40,
+                  vertical: 10,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 25),
 
-            Row(
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildSectionTitle("Order Sources"),
-                      const SizedBox(height: 15),
-                      _buildChartContainer(
-                        height: 200,
-                        child: PieChart(_orderSourceData()),
+                    const Text(
+                      "Business Analytics",
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                        color: AppColor.color4,
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 15),
-                Expanded(flex: 2, child: _buildLegend()),
-              ],
-            ),
-            const SizedBox(height: 25),
+                    ),
+                    const SizedBox(height: 20),
 
-            _buildSectionTitle("Top Rated Items"),
-            const SizedBox(height: 15),
-            _buildTopItemCard("Truffle Pizza", "4.9 ⭐", "980 Orders"),
-            _buildTopItemCard("Zinger Burger", "4.7 ⭐", "750 Orders"),
-            _buildTopItemCard("Pasta Alfredo", "4.8 ⭐", "620 Orders"),
-            const SizedBox(height: 30),
+                    buildDailyInsightsSection(),
+                    const SizedBox(height: 25),
+
+                    buildSectionTitle("Sales Performance"),
+                    const SizedBox(height: 15),
+                    buildChartContainer(
+                      height: 300,
+                      child: LineChart(mainSalesData()),
+                    ),
+                    const SizedBox(height: 25),
+
+                    buildOrderSourcesSection(),
+                    const SizedBox(height: 25),
+
+                    buildSectionTitle("Top Rated Items"),
+                    const SizedBox(height: 15),
+                    buildTopItemCard("Truffle Pizza", "4.9 ⭐", "980 Orders"),
+                    buildTopItemCard("Zinger Burger", "4.7 ⭐", "750 Orders"),
+                    buildTopItemCard("Pasta Alfredo", "4.8 ⭐", "620 Orders"),
+                    const SizedBox(height: 30),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget buildDailyInsightsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        buildSectionTitle("Daily Insights"),
+        const SizedBox(height: 15),
+        Row(
+          children: [
+            _buildPremiumStatCard(
+              "Orders",
+              "1,240",
+              Icons.local_shipping,
+              AppColor.color4,
+            ),
+            const SizedBox(width: 15),
+            _buildPremiumStatCard(
+              "Revenue",
+              "\$12.5k",
+              Icons.payments,
+              Colors.brown,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget buildOrderSourcesSection() {
+    return Row(
+      children: [
+        Expanded(
+          flex: 3,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              buildSectionTitle("Order Sources"),
+              const SizedBox(height: 15),
+              buildChartContainer(
+                height: 200,
+                child: PieChart(orderSourceData()),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(width: 15),
+        Expanded(flex: 2, child: buildLegend()),
+      ],
+    );
+  }
+
+  Widget buildSectionTitle(String title) {
     return Text(
       title,
       style: TextStyle(
@@ -158,7 +212,7 @@ class ReportsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildChartContainer({required double height, required Widget child}) {
+  Widget buildChartContainer({required double height, required Widget child}) {
     return Container(
       height: height,
       padding: const EdgeInsets.fromLTRB(10, 25, 20, 10),
@@ -171,7 +225,7 @@ class ReportsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTopItemCard(String name, String rate, String orders) {
+  Widget buildTopItemCard(String name, String rate, String orders) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
@@ -221,15 +275,9 @@ class ReportsPage extends StatelessWidget {
     );
   }
 
-  // Charts Logic ---------------------------------------------------------
-
-  LineChartData _mainSalesData() {
+  LineChartData mainSalesData() {
     return LineChartData(
-      gridData: FlGridData(
-        show: true,
-        drawVerticalLine: false,
-        horizontalInterval: 2,
-      ),
+      gridData: const FlGridData(show: true, drawVerticalLine: false),
       titlesData: FlTitlesData(
         rightTitles: const AxisTitles(
           sideTitles: SideTitles(showTitles: false),
@@ -239,9 +287,12 @@ class ReportsPage extends StatelessWidget {
           sideTitles: SideTitles(
             showTitles: true,
             getTitlesWidget:
-                (value, meta) => Text(
-                  ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'][value.toInt() % 5],
-                  style: const TextStyle(fontSize: 10, color: Colors.grey),
+                (value, meta) => Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'][value.toInt() % 5],
+                    style: const TextStyle(fontSize: 10, color: Colors.grey),
+                  ),
                 ),
           ),
         ),
@@ -259,8 +310,6 @@ class ReportsPage extends StatelessWidget {
           isCurved: true,
           color: AppColor.color4,
           barWidth: 6,
-          isStrokeCapRound: true,
-          dotData: const FlDotData(show: false),
           belowBarData: BarAreaData(
             show: true,
             gradient: LinearGradient(
@@ -277,7 +326,7 @@ class ReportsPage extends StatelessWidget {
     );
   }
 
-  PieChartData _orderSourceData() {
+  PieChartData orderSourceData() {
     return PieChartData(
       sectionsSpace: 0,
       centerSpaceRadius: 40,
@@ -285,39 +334,39 @@ class ReportsPage extends StatelessWidget {
         PieChartSectionData(
           color: AppColor.color4,
           value: 45,
-          title: '',
           radius: 25,
+          title: '',
         ),
         PieChartSectionData(
           color: AppColor.color3,
           value: 25,
-          title: '',
           radius: 25,
+          title: '',
         ),
         PieChartSectionData(
           color: AppColor.color2,
           value: 30,
-          title: '',
           radius: 25,
+          title: '',
         ),
       ],
     );
   }
 
-  Widget _buildLegend() {
+  Widget buildLegend() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _legendItem("Mobile App", AppColor.color4),
+        legendItem("App", AppColor.color4),
         const SizedBox(height: 8),
-        _legendItem("Website", AppColor.color3),
+        legendItem("Web", AppColor.color3),
         const SizedBox(height: 8),
-        _legendItem("Phone Call", AppColor.color2),
+        legendItem("Call", AppColor.color2),
       ],
     );
   }
 
-  Widget _legendItem(String text, Color color) {
+  Widget legendItem(String text, Color color) {
     return Row(
       children: [
         Container(

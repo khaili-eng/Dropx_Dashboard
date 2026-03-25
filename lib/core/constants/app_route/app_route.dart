@@ -1,4 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:maadati/features/auth/presentation/view/%D9%8DSetting_page.dart';
+import 'package:maadati/features/auth/presentation/view/analis_page.dart';
+import 'package:maadati/features/auth/presentation/view/overview_page.dart';
 import 'package:maadati/features/customers/presentation/view/customers_page.dart';
 import 'package:maadati/features/dashboard/presentation/view/dashboard_page.dart';
 
@@ -15,11 +18,15 @@ class AppRoute {
   static const String fees = '/fees';
   static const String reports = '/reports';
   static const String settings = '/settings';
-
+  static const String overview = '/overview';
+  static const String settingsPage = '/settingsPage';
   static Map<String, WidgetBuilder> routes = {
     auth: (context) => AuthPage(),
     dashboard: (context) => DashboardPage(),
     customers: (context) => CustomersPage(),
+    overview: (context) => OverviewPage(),
+    reports: (context) => ReportsPage(),
+    //advertisement: (context) => const Advertisement(),
     //  dashboard:(context)=>DashboardPage(),
     // customers:(context)=>ClientPage(),
     //advertisement:(context)=>ProjectPage(),

@@ -6,8 +6,11 @@ import 'package:maadati/core/components/ActivityComponents/activitySection_compo
 import 'package:maadati/core/components/GridComponents/gridSection_component.dart';
 import 'package:maadati/core/components/header_component.dart';
 import 'package:maadati/core/constants/app_color/app_color.dart';
+import 'package:maadati/core/constants/app_route/app_route.dart';
 import 'package:maadati/core/cubits/restaurant_cubit.dart';
+import 'package:maadati/core/responsive/responsive.dart';
 import 'package:maadati/core/states/restaurant_state.dart';
+import 'package:maadati/core/widgets/side_drawer.dart';
 
 class OverviewPage extends StatefulWidget {
   const OverviewPage({super.key});
@@ -16,6 +19,7 @@ class OverviewPage extends StatefulWidget {
   State<OverviewPage> createState() => _OverviewPageState();
 }
 
+final GlobalKey<ScaffoldState> drawerKey = GlobalKey();
 final TextEditingController nameController = TextEditingController();
 final TextEditingController phoneController = TextEditingController();
 final TextEditingController passController = TextEditingController();
@@ -172,14 +176,13 @@ class _OverviewPageState extends State<OverviewPage> {
                                 return;
                               }
 
-                              // إرسال البيانات (لاحظ تمرير images كما هي XFile)
                               context.read<RestaurantCubit>().storeRestaurant(
                                 fullname: nameController.text,
                                 phone: phoneController.text,
                                 password: passController.text,
                                 city: cityController.text,
                                 commissionValue: commissionController.text,
-                                images: images, // نمرر قائمة الـ XFile
+                                images: images,
                                 description: descriptionController.text,
                                 workingHoursStart:
                                     workingHoursStartController.text,
@@ -199,6 +202,31 @@ class _OverviewPageState extends State<OverviewPage> {
     }
 
     return Scaffold(
+      key: drawerKey,
+      drawer: SizedBox(
+        width: 250,
+        child: SideDrawer(currentRoute: AppRoute.overview),
+      ),
+      appBar:
+          !Responsive.isDesktop(context)
+              ? AppBar(
+                elevation: 0,
+                backgroundColor: Colors.white,
+                leading: IconButton(
+                  onPressed: () {
+                    drawerKey.currentState!.openDrawer();
+                  },
+                  icon: const Icon(Icons.menu, color: AppColor.color4),
+                ),
+                title: const Text(
+                  "Overview",
+                  style: TextStyle(color: Colors.black),
+                ),
+              )
+              : const PreferredSize(
+                preferredSize: Size.zero,
+                child: SizedBox(),
+              ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => showAddRestaurantSheet(context),
         backgroundColor: AppColor.color4,
@@ -210,105 +238,119 @@ class _OverviewPageState extends State<OverviewPage> {
       ),
       backgroundColor: AppColor.color1,
       body: SafeArea(
-        child: BlocBuilder<RestaurantCubit, RestaurantState>(
-          builder: (context, state) {
-            if (state is RestaurantLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (Responsive.isDesktop(context))
+              const Expanded(
+                flex: 1,
+                child: SideDrawer(currentRoute: AppRoute.overview),
+              ),
 
-            if (state is RestaurantError) {
-              return Center(
+            Expanded(
+              flex: 10,
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(
+                  horizontal: Responsive.isMobile(context) ? 20 : 40,
+                  vertical: 10,
+                ),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(state.message),
-                    TextButton(
-                      onPressed:
-                          () =>
-                              context
-                                  .read<RestaurantCubit>()
-                                  .getAllRestaurants(),
-                      child: const Text("Try Again"),
+                    //  const Header(),
+                    const SizedBox(height: 25),
+                    const Text(
+                      "Overview Management",
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    BlocBuilder<RestaurantCubit, RestaurantState>(
+                      builder: (context, state) {
+                        if (state is RestaurantLoading) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        if (state is RestaurantError) {
+                          return Center(child: Text(state.message));
+                        }
+                        if (state is RestaurantLoaded) {
+                          final restaurants = state.restaurants;
+                          return Column(
+                            children: [
+                              Card(
+                                elevation: 4,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text(
+                                            "Available Restaurants",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap:
+                                                () =>
+                                                    context
+                                                        .read<RestaurantCubit>()
+                                                        .getAllRestaurants(),
+                                            child: const Text(
+                                              "Show All",
+                                              style: TextStyle(
+                                                color: AppColor.color4,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 5),
+                                      Text(
+                                        "${restaurants.length}",
+                                        style: const TextStyle(
+                                          fontSize: 32,
+                                          fontWeight: FontWeight.w900,
+                                          color: AppColor.color4,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 25),
+
+                              if (restaurants.isEmpty)
+                                buildEmptyState(context)
+                              else ...[
+                                GridSection(restaurants: restaurants),
+                                const SizedBox(height: 25),
+                                ActivitySection(restaurants: restaurants),
+                              ],
+                            ],
+                          );
+                        }
+                        return const Center(child: Text("Please wait..."));
+                      },
                     ),
                   ],
                 ),
-              );
-            }
-
-            if (state is RestaurantLoaded) {
-              final List<dynamic> restaurants = state.restaurants;
-
-              return ListView(
-                padding: const EdgeInsets.all(20),
-                children: [
-                  const Header(),
-                  const SizedBox(height: 25),
-
-                  Card(
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                "Available Restaurants",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              if (restaurants.isNotEmpty)
-                                GestureDetector(
-                                  onTap:
-                                      () =>
-                                          context
-                                              .read<RestaurantCubit>()
-                                              .getAllRestaurants(),
-                                  child: const Text(
-                                    "Show All",
-                                    style: TextStyle(
-                                      color: AppColor.color4,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            "${restaurants.length}",
-                            style: const TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.w900,
-                              color: AppColor.color4,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 25),
-
-                  if (restaurants.isEmpty)
-                    buildEmptyState(context)
-                  else ...[
-                    GridSection(restaurants: restaurants),
-                    const SizedBox(height: 25),
-                    ActivitySection(restaurants: restaurants),
-                  ],
-                ],
-              );
-            }
-
-            return const Center(child: Text("please wait..."));
-          },
+              ),
+            ),
+          ],
         ),
       ),
     );
