@@ -1,53 +1,84 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:maadati/core/constants/app_route/app_route.dart';
-import 'package:maadati/core/localization/locale_cubit.dart';
-import 'package:maadati/core/localization/locale_state.dart';
-import 'package:maadati/features/auth/presentation/view/auth_page.dart';
+import 'package:maadati/core/api/commission_api.dart';
+import 'package:maadati/core/api/deliverysetting_api.dart';
+import 'package:maadati/core/api/meal_api.dart';
+import 'package:maadati/core/api/restaurant_api.dart';
+import 'package:maadati/core/constants/app_color/app_color.dart';
+import 'package:maadati/core/constants/url.dart';
+import 'package:maadati/core/cubits/commission_cubit.dart';
+import 'package:maadati/core/cubits/deliverysetting_cubit.dart';
+import 'package:maadati/core/cubits/meal_cubit.dart';
+import 'package:maadati/core/cubits/order_cubit.dart';
+import 'package:maadati/core/cubits/restaurantsDetails_cubit.dart';
+import 'package:maadati/core/cubits/restaurant_cubit.dart';
+import 'package:maadati/features/auth/presentation/view/home_page.dart';
 
 void main() {
-  runApp(
-    MultiBlocProvider(
-      providers: [
-        BlocProvider<LocaleCubit>(
-          create: (_) => LocaleCubit(),
-        ),
+  final api = RestaurantApi(
+    baseUrl: baseUrl,
+    token: "11|6sfz4Z1jjSem2Z0oWUGb8YLknYDHnclUR9TsxYUEdccef799",
+  );
 
-      ],
-      child: const MyApp(),
+  final mealapi = MealApi(
+    baseUrl: baseUrl,
+    token: "11|6sfz4Z1jjSem2Z0oWUGb8YLknYDHnclUR9TsxYUEdccef799",
+  );
+
+  final deliveryApi = DeliverySettingApi(
+    baseUrl: baseUrl,
+    token: "11|6sfz4Z1jjSem2Z0oWUGb8YLknYDHnclUR9TsxYUEdccef799",
+  );
+  final commissionApi = CommissionApi(
+    baseUrl: baseUrl,
+    token: "11|6sfz4Z1jjSem2Z0oWUGb8YLknYDHnclUR9TsxYUEdccef799",
+  );
+
+  runApp(
+    MaddatiApp(
+      api: api,
+      mealApi: mealapi,
+      deliveryApi: deliveryApi,
+      commissionApi: commissionApi,
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MaddatiApp extends StatelessWidget {
+  final RestaurantApi api;
+  final MealApi mealApi;
+  final DeliverySettingApi deliveryApi;
+  final CommissionApi commissionApi;
+
+  const MaddatiApp({
+    super.key,
+    required this.api,
+    required this.mealApi,
+    required this.deliveryApi,
+    required this.commissionApi,
+  });
 
   @override
   Widget build(BuildContext context) {
-
-    return BlocBuilder<LocaleCubit, LocaleState>(
-      builder: (context, locale) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Maadati',
-          locale: context.read<LocaleCubit>().currentLocale,
-          supportedLocales: const [
-            Locale('en'),
-            Locale('ar'),
-          ],
-          localizationsDelegates: const [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          ),
-         initialRoute: AppRoute.auth,
-         routes: AppRoute.routes,
-        );
-      },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => RestaurantDetailsCubit(api)),
+        BlocProvider(create: (_) => DeliveryCubit(deliveryApi)),
+        BlocProvider(create: (_) => CommissionCubit(commissionApi)),
+        BlocProvider(create: (_) => MealCubit(mealApi)),
+        BlocProvider(create: (_) => OrderCubit(api)),
+        BlocProvider(create: (_) => RestaurantCubit(api)..getAllRestaurants()),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Maddati',
+        theme: ThemeData(
+          useMaterial3: true,
+          colorSchemeSeed: AppColor.color3,
+          scaffoldBackgroundColor: AppColor.color1,
+        ),
+        home: const HomePage(),
+      ),
     );
   }
 }

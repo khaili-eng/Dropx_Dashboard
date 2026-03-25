@@ -10,9 +10,7 @@ abstract class AuthState extends Equatable {
 
 class AuthInitial extends AuthState {}
 
-
 class AuthLoading extends AuthState {}
-
 
 class AuthSuccess extends AuthState {
   final AuthResponse authResponse;
@@ -22,7 +20,6 @@ class AuthSuccess extends AuthState {
   @override
   List<Object?> get props => [authResponse];
 }
-
 
 class AuthFailure extends AuthState {
   final String message;

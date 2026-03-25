@@ -1,0 +1,384 @@
+/*import 'package:flutter/material.dart';
+import 'package:maadati/core/components/ActivityComponents/activitySection_component.dart';
+import 'package:maadati/core/components/GridComponents/gridSection_component.dart';
+import 'package:maadati/core/components/header_component.dart';
+import 'package:maadati/core/constants/app_color/app_color.dart';
+
+class OverviewPage extends StatelessWidget {
+  const OverviewPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColor.color1,
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.all(20),
+          children: const [
+            Header(),
+            SizedBox(height: 25),
+            Card(),
+            SizedBox(height: 25),
+            GridSection(),
+            SizedBox(height: 25),
+            ActivitySection(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+*/
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:maadati/core/components/ActivityComponents/activitySection_component.dart';
+import 'package:maadati/core/components/GridComponents/gridSection_component.dart';
+import 'package:maadati/core/components/header_component.dart';
+import 'package:maadati/core/constants/app_color/app_color.dart';
+import 'package:maadati/core/cubits/restaurant_cubit.dart';
+import 'package:maadati/core/states/restaurant_state.dart';
+
+class OverviewPage extends StatefulWidget {
+  const OverviewPage({super.key});
+
+  @override
+  State<OverviewPage> createState() => _OverviewPageState();
+}
+
+final TextEditingController nameController = TextEditingController();
+final TextEditingController phoneController = TextEditingController();
+final TextEditingController passController = TextEditingController();
+final TextEditingController cityController = TextEditingController();
+final TextEditingController commissionController = TextEditingController();
+final TextEditingController descriptionController = TextEditingController();
+final TextEditingController workingHoursStartController =
+    TextEditingController();
+final TextEditingController workingHoursEndController = TextEditingController();
+
+List<dynamic> images = [];
+String getImageUrl(String? path) {
+  if (path == null || path.isEmpty)
+    return 'https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?w=500&q=80';
+
+  if (path.startsWith('http')) return path;
+
+  return "http://127.0.0.1:8000/storage/$path";
+}
+
+class _OverviewPageState extends State<OverviewPage> {
+  @override
+  Widget build(BuildContext context) {
+    Widget buildField(
+      String label,
+      IconData icon,
+      TextEditingController controller, {
+      bool isPassword = false,
+    }) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 15),
+        child: TextField(
+          controller: controller,
+          obscureText: isPassword,
+          decoration: InputDecoration(
+            labelText: label,
+            prefixIcon: Icon(icon, color: AppColor.color4),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+          ),
+        ),
+      );
+    }
+
+    Future pickImages(StateSetter setSheetState) async {
+      final picker = ImagePicker();
+      final picked = await picker.pickMultiImage();
+      if (picked.isNotEmpty) {
+        setSheetState(() {
+          images = picked.cast<dynamic>(); // تخزين الـ XFiles مباشرة
+        });
+      }
+    }
+
+    void showAddRestaurantSheet(BuildContext context) {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+        ),
+        builder:
+            (context) => StatefulBuilder(
+              builder: (context, setSheetState) {
+                return DraggableScrollableSheet(
+                  initialChildSize: 0.9,
+                  expand: false,
+                  builder:
+                      (_, scrollController) => ListView(
+                        controller: scrollController,
+                        padding: const EdgeInsets.all(20),
+                        children: [
+                          const Text(
+                            "Add New Restaurant",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          buildField("Full Name", Icons.person, nameController),
+                          buildField(
+                            "Phone Number",
+                            Icons.phone,
+                            phoneController,
+                          ),
+                          buildField(
+                            "Password",
+                            Icons.lock,
+                            passController,
+                            isPassword: true,
+                          ),
+                          buildField(
+                            "City",
+                            Icons.location_city,
+                            cityController,
+                          ),
+                          buildField(
+                            "Commission Value",
+                            Icons.percent,
+                            commissionController,
+                          ),
+                          buildField(
+                            "Description",
+                            Icons.description,
+                            descriptionController,
+                          ),
+                          buildField(
+                            "Working Hours Start",
+                            Icons.access_time,
+                            workingHoursStartController,
+                          ),
+                          buildField(
+                            "Working Hours End",
+                            Icons.access_time,
+                            workingHoursEndController,
+                          ),
+                          GestureDetector(
+                            onTap: () => pickImages(setSheetState),
+                            child: Container(
+                              height: 150,
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade100,
+                                borderRadius: BorderRadius.circular(15),
+                                border: Border.all(color: Colors.grey.shade300),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15),
+                                child:
+                                    images.isEmpty
+                                        ? const Center(
+                                          child: Icon(
+                                            Icons.add_a_photo,
+                                            size: 40,
+                                          ),
+                                        )
+                                        : kIsWeb
+                                        ? Image.network(
+                                          images[0].path,
+                                          fit: BoxFit.cover,
+                                        ) // في الويب نستخدم network لروابط blob
+                                        : Image.network(
+                                          images[0].path,
+                                          fit: BoxFit.cover,
+                                        ), // حتى في الموبايل XFile.path يعمل مع Image.network أحياناً أو استخدم Image.file(File(images[0].path))
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 25),
+                          ElevatedButton(
+                            onPressed: () {
+                              if (nameController.text.isEmpty ||
+                                  images.isEmpty) {
+                                // تنبيه المستخدم
+                                return;
+                              }
+
+                              // إرسال البيانات (لاحظ تمرير images كما هي XFile)
+                              context.read<RestaurantCubit>().storeRestaurant(
+                                fullname: nameController.text,
+                                phone: phoneController.text,
+                                password: passController.text,
+                                city: cityController.text,
+                                commissionValue: commissionController.text,
+                                images: images, // نمرر قائمة الـ XFile
+                                description: descriptionController.text,
+                                workingHoursStart:
+                                    workingHoursStartController.text,
+                                workingHoursEnd: workingHoursEndController.text,
+                                commissionType: "fixed",
+                              );
+                              Navigator.pop(context);
+                            },
+                            child: const Text("Save Restaurant"),
+                          ),
+                        ],
+                      ),
+                );
+              },
+            ),
+      );
+    }
+
+    return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => showAddRestaurantSheet(context),
+        backgroundColor: AppColor.color4,
+        icon: const Icon(Icons.add, color: Colors.white),
+        label: const Text(
+          "Add Restaurant",
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+      backgroundColor: AppColor.color1,
+      body: SafeArea(
+        child: BlocBuilder<RestaurantCubit, RestaurantState>(
+          builder: (context, state) {
+            if (state is RestaurantLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (state is RestaurantError) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(state.message),
+                    TextButton(
+                      onPressed:
+                          () =>
+                              context
+                                  .read<RestaurantCubit>()
+                                  .getAllRestaurants(),
+                      child: const Text("Try Again"),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            if (state is RestaurantLoaded) {
+              final List<dynamic> restaurants = state.restaurants;
+
+              return ListView(
+                padding: const EdgeInsets.all(20),
+                children: [
+                  const Header(),
+                  const SizedBox(height: 25),
+
+                  Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                "Available Restaurants",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              if (restaurants.isNotEmpty)
+                                GestureDetector(
+                                  onTap:
+                                      () =>
+                                          context
+                                              .read<RestaurantCubit>()
+                                              .getAllRestaurants(),
+                                  child: const Text(
+                                    "Show All",
+                                    style: TextStyle(
+                                      color: AppColor.color4,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            "${restaurants.length}",
+                            style: const TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.w900,
+                              color: AppColor.color4,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 25),
+
+                  if (restaurants.isEmpty)
+                    buildEmptyState(context)
+                  else ...[
+                    GridSection(restaurants: restaurants),
+                    const SizedBox(height: 25),
+                    ActivitySection(restaurants: restaurants),
+                  ],
+                ],
+              );
+            }
+
+            return const Center(child: Text("please wait..."));
+          },
+        ),
+      ),
+    );
+  }
+}
+
+Widget buildEmptyState(BuildContext context) {
+  return Container(
+    padding: const EdgeInsets.symmetric(vertical: 50),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset(
+          'assets/images/notfound.jpg',
+          width: 500,
+          height: 200,
+          fit: BoxFit.contain,
+        ),
+        const SizedBox(height: 20),
+        const Text(
+          "No restaurants found in this area",
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.grey,
+          ),
+        ),
+        const SizedBox(height: 20),
+        ElevatedButton.icon(
+          onPressed: () {
+            context.read<RestaurantCubit>().getAllRestaurants();
+          },
+          icon: const Icon(Icons.refresh),
+          label: const Text("Show All Restaurants"),
+          style: ElevatedButton.styleFrom(backgroundColor: AppColor.color4),
+        ),
+      ],
+    ),
+  );
+}

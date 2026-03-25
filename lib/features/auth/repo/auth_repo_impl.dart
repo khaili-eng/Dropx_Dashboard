@@ -5,34 +5,29 @@ import 'package:maadati/core/network/api/api_exceptions.dart';
 import 'package:maadati/core/network/api/api_service.dart';
 import 'package:maadati/core/utils/pref_helper.dart';
 import 'package:maadati/features/auth/data/model/auth_response.dart';
-import 'package:maadati/features/auth/data/model/user_mpdel.dart';
 import 'package:maadati/features/auth/repo/auth_repo.dart';
 
-class AuthRepoImpl implements AuthRepo{
-      final ApiService apiService;
-      AuthRepoImpl(this.apiService);
-  //login 
-  Future<AuthResponse>login(String phone,String password)async{
-    try{
+class AuthRepoImpl implements AuthRepo {
+  final ApiService apiService;
+  AuthRepoImpl(this.apiService);
+  //login
+  Future<AuthResponse> login(String phone, String password) async {
+    try {
       final response = await apiService.post(EndPoints.login, {
-          "phone":phone,
-          "password":password
+        "phone": phone,
+        "password": password,
       });
-      if(response==null){
+      if (response == null) {
         throw ApiError(message: "Empty response from server");
       }
-      final authResponse  = AuthResponse.fromJson(response);
+      final authResponse = AuthResponse.fromJson(response);
       //save token
-      if(authResponse.token!=null){
-        await PrefHelper.saveToken(authResponse.token);
-      }
+      await PrefHelper.saveToken(authResponse.token);
       return authResponse;
-
-    }on DioException catch(e){
-     throw ApiExceptions.handleError(e);
-
-    } catch(e){
-     throw ApiError(message: e.toString());
+    } on DioException catch (e) {
+      throw ApiExceptions.handleError(e);
+    } catch (e) {
+      throw ApiError(message: e.toString());
     }
   }
 }

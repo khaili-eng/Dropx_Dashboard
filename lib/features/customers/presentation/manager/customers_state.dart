@@ -1,5 +1,3 @@
-
-
 import 'package:equatable/equatable.dart';
 import 'package:maadati/features/customers/data/model/customer_model.dart';
 
@@ -17,11 +15,12 @@ class CustomersLoaded extends CustomersState {
   final List<CustomerModel> customers;
   final String? message;
 
-  const CustomersLoaded(this.customers, {this.message} );
+  const CustomersLoaded(this.customers, {this.message});
 
   @override
-  List<Object?> get props => [customers,message];
+  List<Object?> get props => [customers, message];
 }
+
 class CustomerStatusUpdated extends CustomersState {
   final String? message;
 
