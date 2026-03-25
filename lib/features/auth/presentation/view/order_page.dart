@@ -1,12 +1,5 @@
 import 'package:flutter/material.dart';
-
-// استخدام نفس لوحة الألوان لضمان التناسق
-class AppColor {
-  static const Color color1 = Color(0xFFFFFBF1);
-  static const Color color2 = Color(0xFFFFF2D0);
-  static const Color color3 = Color(0xFFFFB2B2);
-  static const Color color4 = Color(0xFFE36A6A);
-}
+import 'package:maadati/core/constants/app_color/app_color.dart';
 
 class OrdersPage extends StatelessWidget {
   const OrdersPage({super.key});
@@ -93,7 +86,6 @@ class OrdersPage extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // Header of the card
           Padding(
             padding: const EdgeInsets.all(16),
             child: Row(

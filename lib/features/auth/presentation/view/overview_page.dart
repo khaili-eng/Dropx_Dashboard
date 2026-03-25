@@ -1,35 +1,3 @@
-/*import 'package:flutter/material.dart';
-import 'package:maadati/core/components/ActivityComponents/activitySection_component.dart';
-import 'package:maadati/core/components/GridComponents/gridSection_component.dart';
-import 'package:maadati/core/components/header_component.dart';
-import 'package:maadati/core/constants/app_color/app_color.dart';
-
-class OverviewPage extends StatelessWidget {
-  const OverviewPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.color1,
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(20),
-          children: const [
-            Header(),
-            SizedBox(height: 25),
-            Card(),
-            SizedBox(height: 25),
-            GridSection(),
-            SizedBox(height: 25),
-            ActivitySection(),
-          ],
-        ),
-      ),
-    );
-  }
-}
-*/
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -96,7 +64,7 @@ class _OverviewPageState extends State<OverviewPage> {
       final picked = await picker.pickMultiImage();
       if (picked.isNotEmpty) {
         setSheetState(() {
-          images = picked.cast<dynamic>(); // تخزين الـ XFiles مباشرة
+          images = picked.cast<dynamic>();
         });
       }
     }
@@ -187,11 +155,11 @@ class _OverviewPageState extends State<OverviewPage> {
                                         ? Image.network(
                                           images[0].path,
                                           fit: BoxFit.cover,
-                                        ) // في الويب نستخدم network لروابط blob
+                                        )
                                         : Image.network(
                                           images[0].path,
                                           fit: BoxFit.cover,
-                                        ), // حتى في الموبايل XFile.path يعمل مع Image.network أحياناً أو استخدم Image.file(File(images[0].path))
+                                        ),
                               ),
                             ),
                           ),
@@ -201,7 +169,6 @@ class _OverviewPageState extends State<OverviewPage> {
                             onPressed: () {
                               if (nameController.text.isEmpty ||
                                   images.isEmpty) {
-                                // تنبيه المستخدم
                                 return;
                               }
 

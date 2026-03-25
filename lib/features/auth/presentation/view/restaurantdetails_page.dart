@@ -32,9 +32,9 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
   final commissionTypeController = TextEditingController();
   final commissionValueController = TextEditingController();
 
-  List<dynamic> _meals = [];
+  List<dynamic> meals = [];
   List<XFile> images = [];
-  String? _imageUrl;
+  String? imageUrl;
   bool isEditing = false;
 
   @override
@@ -69,11 +69,7 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
               if (state is RestaurantDetailsLoaded) {
                 final data = state.data['data'];
                 final user = data['user'];
-
-                // 1. نبدأ بالقيمة القادمة من البراميتر (widget.city) بدلاً من "No City"
                 String city = widget.city;
-
-                // 2. فقط إذا وجدنا مدينة في الـ API نقوم بتحديث المتغير
                 if (user != null &&
                     user['areas'] != null &&
                     user['areas'].isNotEmpty) {
@@ -91,8 +87,8 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
 
                   commissionTypeController.text = 'fixed';
                   commissionValueController.text = '1500';
-                  _imageUrl = data['image'];
-                  _meals = data['meals'] ?? [];
+                  imageUrl = data['image'];
+                  meals = data['meals'] ?? [];
                 });
               }
 
@@ -203,8 +199,8 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
         background: Stack(
           fit: StackFit.expand,
           children: [
-            _imageUrl != null
-                ? Image.network(_imageUrl!, fit: BoxFit.cover)
+            imageUrl != null
+                ? Image.network(imageUrl!, fit: BoxFit.cover)
                 : Container(color: AppColor.color2),
             Container(
               decoration: BoxDecoration(
@@ -313,7 +309,7 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
   }
 
   Widget mealsList() {
-    if (_meals.isEmpty)
+    if (meals.isEmpty)
       return const Center(
         child: Padding(
           padding: EdgeInsets.all(20),
@@ -324,10 +320,10 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: _meals.length,
+      itemCount: meals.length,
       separatorBuilder: (_, __) => const SizedBox(height: 12),
       itemBuilder: (_, i) {
-        final meal = _meals[i];
+        final meal = meals[i];
         return Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -406,10 +402,10 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
           backgroundImage:
               images.isNotEmpty
                   ? FileImage(File(images.first.path))
-                  : (_imageUrl != null ? NetworkImage(_imageUrl!) : null)
+                  : (imageUrl != null ? NetworkImage(imageUrl!) : null)
                       as ImageProvider?,
           child:
-              _imageUrl == null && images.isEmpty
+              imageUrl == null && images.isEmpty
                   ? const Icon(Icons.restaurant, size: 40)
                   : null,
         ),
@@ -424,14 +420,14 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
       child: Padding(
         padding: const EdgeInsets.all(16),
         child:
-            _meals.isEmpty
+            meals.isEmpty
                 ? const Text("No meals")
                 : ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _meals.length,
+                  itemCount: meals.length,
                   itemBuilder: (_, i) {
-                    final meal = _meals[i];
+                    final meal = meals[i];
 
                     return Card(
                       elevation: 2,
