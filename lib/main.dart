@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:maadati/features/auth/presentation/view/auth_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:maadati/core/api/order_api.dart';
+
+import 'package:maadati/features/order/presentation/cubit/order_cubit.dart';
+import 'package:maadati/features/order/presentation/view/order_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,11 +19,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Maadati',
       theme: ThemeData(
-
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: AuthPage(),
+      home: BlocProvider(
+        create: (context) => OrderCubit(ApiService())..getAllOrders(),
+        child: OrderPage(),
+      ),
     );
   }
 }
-
