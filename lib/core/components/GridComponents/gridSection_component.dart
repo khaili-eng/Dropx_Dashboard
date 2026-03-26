@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:maadati/core/constants/url.dart' as UrlConstants;
 import 'package:maadati/core/cubits/order_cubit.dart';
 import 'package:maadati/features/auth/presentation/view/restaurantdetails_page.dart';
 
@@ -33,23 +32,28 @@ class GridSection extends StatelessWidget {
             (user?['areas'] != null && user['areas'].isNotEmpty)
                 ? user['areas'][0]['city']
                 : 'No City';
+        final restimg = r;
 
         final restaurantData = r['restaurant'];
-        String? rawPath = restaurantData?['image'];
+        String? rawPath = restimg?['image'];
 
         int restaurantId =
             int.tryParse(restaurantData?['id'].toString() ?? '') ??
             int.tryParse(r['id'].toString()) ??
             0;
+
         String? finalImageUrl;
         if (rawPath != null && rawPath.isNotEmpty) {
           if (rawPath.startsWith('http')) {
-            finalImageUrl = rawPath;
+            finalImageUrl = rawPath.replaceAll('10.0.2.2', '127.0.0.1');
           } else {
-            finalImageUrl = "${UrlConstants.baseUrl}/storage/$rawPath";
+            // finalImageUrl = "http://127.0.0.1:8000/storage/$rawPath";
           }
         }
 
+        print(
+          "*********************************${rawPath}*******************************************************",
+        );
         return InkWell(
           onTap: () {
             Navigator.push(
@@ -91,7 +95,7 @@ class GridSection extends StatelessWidget {
                       image: DecorationImage(
                         image:
                             finalImageUrl != null
-                                ? NetworkImage(finalImageUrl)
+                                ? NetworkImage(rawPath!)
                                 : const AssetImage(
                                       'assets/images/restaurant-interior.jpg',
                                     )

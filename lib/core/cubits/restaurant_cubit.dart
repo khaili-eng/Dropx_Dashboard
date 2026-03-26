@@ -56,11 +56,10 @@ class RestaurantCubit extends Cubit<RestaurantState> {
     required String workingHoursEnd,
     required String commissionType,
     required String commissionValue,
-    required dynamic images, // غيرناها لـ dynamic
+    required dynamic images,
   }) async {
     emit(RestaurantLoading());
     try {
-      // إذا كنت بتبعث صورة واحدة، تأكد إنك بتمرر العنصر الأول أو عدل الـ API لتستقبل القائمة
       await apiService.storeRestaurant(
         fullname: fullname,
         phone: phone,
@@ -71,8 +70,7 @@ class RestaurantCubit extends Cubit<RestaurantState> {
         workingHoursEnd: workingHoursEnd,
         commissionType: commissionType,
         commissionValue: commissionValue,
-        imageFile:
-            images is List ? images.first : images, // نمرر صورة واحدة للـ API
+        imageFile: images is List ? images.first : images,
       );
       await getAllRestaurants();
     } catch (e) {
@@ -80,7 +78,6 @@ class RestaurantCubit extends Cubit<RestaurantState> {
     }
   }
 
-  // --- دالة التحديث المعدلة ---
   Future<void> updateRestaurant({
     required int id,
     required String fullname,
@@ -89,7 +86,7 @@ class RestaurantCubit extends Cubit<RestaurantState> {
     required String description,
     required String commissionType,
     required String commissionValue,
-    required dynamic images, // غيرناها لـ dynamic
+    required dynamic images,
   }) async {
     emit(RestaurantLoading());
     try {
@@ -101,7 +98,7 @@ class RestaurantCubit extends Cubit<RestaurantState> {
         description: description,
         commissionType: commissionType,
         commissionValue: commissionValue,
-        imageFile: images is List ? images.first : images, // نمرر صورة واحدة
+        imageFile: images is List ? images.first : images,
       );
       await getAllRestaurants();
     } catch (e) {
