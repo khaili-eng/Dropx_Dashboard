@@ -1,17 +1,22 @@
 import 'package:dio/dio.dart';
-import 'package:maadati/features/order/data/model/order_model.dart';
+import 'package:maadati/core/constants/end_point/end_points.dart';
 
-class ApiService {
+
+import 'package:maadati/features/order_det/data/model/order_det_model.dart';
+
+class ApiServiceDet {
   final Dio _dio = Dio();
 
   final String baseUrl = "http://127.0.0.1:8000/api";
 
-  Future<List<Order>> fetchAllOrders() async {
+  Future<List<OrderData>> getOrderDetails(int id) async {
+
     String myToken = "2|Z0qsMsh3cSKEfHii1MdThgU0yhhiZk9FWqJX9pi0eb6180c0";
+    // String myToken = PrefHelper.getToken() as String;
 
     try {
-      final response = await _dio.get(
-        "$baseUrl/admin/AllOrders",
+      final res = await _dio.get(
+        "$baseUrl${EndPoints.OrderDet(id)}",
         options: Options(
           headers: {
             'Accept': 'application/json',
@@ -20,15 +25,17 @@ class ApiService {
         ),
       );
 
-      if (response.statusCode == 200) {
-        List<dynamic> data = response.data['data'];
-        return data.map((json) => Order.fromJson(json)).toList();
+
+           if (res.statusCode == 200) {
+        final order = OrderResponse.fromJson(res.data);
+        return [order.data]; 
       } else {
         throw Exception("فشل في الوصول للسيرفر");
       }
     } on DioException catch (e) {
-      print("Error Data: ${e.response?.data}");
       throw Exception("خطأ من السيرفر: ${e.response?.statusCode}");
     }
   }
 }
+   
+

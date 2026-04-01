@@ -19,7 +19,6 @@ class Order {
 
   factory Order.fromJson(Map<String, dynamic> json) {
     return Order(
-      // استخدام .toInt() أو تحويل آمن للتأكد من النوع
       id: json["id"] is int ? json["id"] : int.tryParse(json["id"].toString()),
       userId:
           json["user_id"] is int
@@ -34,7 +33,6 @@ class Order {
               ? json["driver_id"]
               : int.tryParse(json["driver_id"].toString()),
       status: json["status"]?.toString(),
-      // تحويل السعر دائماً لنص لضمان عدم حدوث Type Mismatch
       totalPrice: json["total_price"]?.toString(),
 
       createdAt:
@@ -42,7 +40,7 @@ class Order {
               ? null
               : DateTime.tryParse(
                 json["created_at"].toString(),
-              ), // استخدام tryParse أضمن من parse
+              ), 
     );
   }
 }

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maadati/core/respo/responsive.dart';
 import 'package:maadati/core/respo/size_config.dart';
-import 'package:maadati/features/order/widget/hedeer.dart';
-import 'package:maadati/features/order/widget/orders_section.dart';
+import 'package:maadati/features/order/presentation/widget/orders_section.dart';
 
 class OrderContent extends StatelessWidget {
   const OrderContent({super.key});
@@ -17,7 +16,6 @@ class OrderContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Header(),
           SizedBox(height: SizeConfig.blockSizeVertical * 4),
           const OrdersSection(),
         ],

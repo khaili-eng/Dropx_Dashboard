@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:maadati/core/constants/app_color/app_color.dart';
-import 'package:maadati/features/order/widget/order_item.dart';
+
+import 'package:maadati/features/order/presentation/widget/order_item.dart';
 
 class OrdersList extends StatelessWidget {
   final List orders;
@@ -19,14 +19,14 @@ class OrdersList extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text(
-            "قائمة الطلبات الحالية",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: AppColor.color4,
-            ),
-          ),
+          // Text(
+          //   "My Orders",
+          //   style: TextStyle(
+          //     fontSize: 20,
+          //     fontWeight: FontWeight.bold,
+          //     color: Colors.white,
+          //   ),
+          // ),
           const SizedBox(height: 20),
 
           ListView.separated(

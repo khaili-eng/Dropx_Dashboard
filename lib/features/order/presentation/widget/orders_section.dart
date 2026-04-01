@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:maadati/features/order/presentation/cubit/oder_stata.dart';
 import 'package:maadati/features/order/presentation/cubit/order_cubit.dart';
-import 'package:maadati/features/order/widget/ordersL_list.dart';
+import 'package:maadati/features/order/presentation/widget/ordersL_list.dart';
 
 class OrdersSection extends StatelessWidget {
   const OrdersSection({super.key});
