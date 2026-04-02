@@ -59,10 +59,7 @@ class OrderPageDetails extends StatelessWidget {
                     children: [
                       Icon(Icons.phone, color: Colors.blue),
                       SizedBox(height: 20),
-                      CustomText(
-                        text: order.user.phone.toString(),
-                        color: Colors.white,
-                      ),
+                      CustomText(text: order.user.phone, color: Colors.white),
                     ],
                   ),
                   SizedBox(height: 20),

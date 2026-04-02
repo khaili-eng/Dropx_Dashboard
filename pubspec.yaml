@@ -38,6 +38,8 @@ dependencies:
   bloc: ^9.2.0
   flutter_bloc: ^9.1.1
   shared_preferences: ^2.5.5
+  fl_chart: ^1.2.0
+  month_picker_dialog: ^6.7.2
 
 dev_dependencies:
   flutter_test:
