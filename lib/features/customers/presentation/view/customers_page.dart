@@ -94,10 +94,19 @@ class _CustomersPageState extends State<CustomersPage> {
                                     if(state is CustomersLoaded){
                                       return Padding(
                                           padding: const EdgeInsets.all(16),
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: CustomersTabel(customers: state.customers),
-                                      ),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            buildStats(state), // 👈 الجديد
+                                            SizedBox(height: 20),
+                                            SizedBox(
+                                              width: double.infinity,
+                                              child: CustomersTabel(
+                                                customers: state.customers,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       );
                                     }
                                     return const SizedBox();
@@ -106,9 +115,54 @@ class _CustomersPageState extends State<CustomersPage> {
                             ],
 
                           ),
-                        )))
+                        )),
+                )
             ],
           )),
     );
   }
+}
+
+//widget for cards
+Widget buildStats(CustomersLoaded state) {
+  final total = state.customers.length;
+  final active = state.customers.where((c) => c.isActive).length;
+  final inactive = total - active;
+
+  return Row(
+    children: [
+      buildCard("Total", total, Colors.blue),
+      SizedBox(width: 20),
+      buildCard("Active", active, Colors.green),
+      SizedBox(width: 20),
+      buildCard("Inactive", inactive, Colors.red),
+    ],
+  );
+}
+//widget card
+Widget buildCard(String title, int count, Color color) {
+  return Expanded(
+    child: Container(
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: TextStyle(color: color)),
+          SizedBox(height: 10),
+          Text(
+            count.toString(),
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: color,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }

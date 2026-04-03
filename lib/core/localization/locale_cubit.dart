@@ -26,7 +26,10 @@ class LocaleCubit extends Cubit<LocaleState> {
       'dd':'Enter your Password',
       'ee':'Phone number is required',
       'ff':'Use the format 09xxxxxxxx',
-      'gg':'Minimum 6 characters'
+      'gg':'Minimum 6 characters',
+      'hh':'Update Advertisement',
+      'ii':'Add Advertisement',
+      'jj':'Back',
 
     },
     'ar': {
@@ -37,7 +40,10 @@ class LocaleCubit extends Cubit<LocaleState> {
       'dd':'أدخل كلمة مرورك ',
       'ee':'  رقم الهاتف مطلوب  ',
       'ff':'  اكتب رقم الهاتف بالشكل 09xxxxxxxxx  ',
-      'gg':'الحد الأدنى 6 أحرف'
+      'gg':'الحد الأدنى 6 أحرف',
+      'hh':'تعديل الإعلان',
+      'ii':'إضافة إعلان ',
+      'jj':'رجوع',
 
 
 

@@ -23,6 +23,23 @@ Future<dynamic>post(String endPoint,Map<String,dynamic>body)async{
     return ApiExceptions.handleError(e);
   }
 }
+//post formdata
+Future<dynamic>postFormData(String endPoint,FormData formData)async{
+  try{
+    final response = await _dioClient.dio.post(
+      endPoint,
+    data: formData,
+    options: Options(
+      headers: {
+        "content-Type":"multipart/form-data",
+      },
+    )
+    );
+    return response.data;
+  }on DioException catch(e){
+    return ApiExceptions.handleError(e);
+  }
+}
 //put||update
   Future<dynamic>put(String endPoint,Map<String,dynamic>body)async{
     try{
@@ -30,6 +47,24 @@ Future<dynamic>post(String endPoint,Map<String,dynamic>body)async{
       return response.data;
     }on DioException catch(e){
       return ApiExceptions.handleError(e);
+    }
+  }
+  //put form data
+
+  Future<dynamic> putFormData(String endPoint, FormData formData) async {
+    try {
+      final response = await _dioClient.dio.post(
+        endPoint,
+        data: formData,
+        options: Options(
+          headers: {
+            "content-Type": "multipart/form-data",
+          },
+        ),
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw ApiExceptions.handleError(e);
     }
   }
 //delete

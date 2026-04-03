@@ -10,6 +10,12 @@ class ApiExceptions{
     if(data is Map<String,dynamic>&&data['message']!=null){
       return ApiError(message: data['message'],statusCode: statusCode);
     }
+    if (error.response != null) {
+      return ApiError.fromJson(
+        error.response!.data,
+        error.response!.statusCode ?? 0,
+      );
+    }
     print(statusCode);
     print(data);
 

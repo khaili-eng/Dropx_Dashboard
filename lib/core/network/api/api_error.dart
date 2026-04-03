@@ -10,26 +10,33 @@ class ApiError {
   });
   //from json
   factory ApiError.fromJson(Map<String, dynamic> json, int statusCode) {
-    return ApiError(
-      message: json['message'] ?? 'Unknown error',
-      statusCode: statusCode,
-      errors: json['errors'] != null
-          ? Map<String, List<String>>.from(
+    Map<String, List<String>>? extractedErrors;
+
+    if (json['errors'] != null) {
+      extractedErrors = Map<String, List<String>>.from(
         json['errors'].map(
               (key, value) => MapEntry(
             key,
             List<String>.from(value),
           ),
         ),
-      )
-          : null,
+      );
+    }
+
+    return ApiError(
+      message: json['message'] ?? 'Unknown error',
+      statusCode: statusCode,
+      errors: extractedErrors,
     );
   }
   String? getFieldError(String field) {
-    if (errors != null && errors![field] != null) {
-      return errors![field]!.first;
+    if (errors != null && errors!.containsKey(field)) {
+      return errors![field]!.isNotEmpty ? errors![field]!.first : null;
     }
     return null;
+  }
+  bool get isValidationError {
+    return errors != null && errors!.isNotEmpty;
   }
 
   @override
