@@ -1,6 +1,6 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' show MediaType;
 
 class RestaurantApi {
   final Dio dio;
@@ -28,8 +28,26 @@ class RestaurantApi {
     required String workingHoursEnd,
     required String commissionType,
     required String commissionValue,
-    required List<File> images,
+    required dynamic imageFile,
   }) async {
+    MultipartFile? multipartFile;
+
+    if (imageFile != null) {
+      if (kIsWeb) {
+        final bytes = await imageFile.readAsBytes();
+        multipartFile = MultipartFile.fromBytes(
+          bytes,
+          filename: imageFile.name,
+          contentType: MediaType('image', 'jpg'),
+        );
+      } else {
+        multipartFile = await MultipartFile.fromFile(
+          imageFile.path,
+          filename: imageFile.path.split('/').last,
+        );
+      }
+    }
+
     FormData formData = FormData.fromMap({
       "fullname": fullname,
       "phone": phone,
@@ -40,7 +58,7 @@ class RestaurantApi {
       "working_hours_end": workingHoursEnd,
       "commission_type": commissionType,
       "commission_value": commissionValue,
-      "image": images,
+      "image": multipartFile,
     });
 
     return dio.post("/api/admin/resturant/storeresturant", data: formData);
@@ -54,8 +72,25 @@ class RestaurantApi {
     required String description,
     required String commissionType,
     required String commissionValue,
-    required List<File> images,
+    required dynamic imageFile,
   }) async {
+    MultipartFile? multipartFile;
+    if (imageFile != null) {
+      if (kIsWeb) {
+        final bytes = await imageFile.readAsBytes();
+        multipartFile = MultipartFile.fromBytes(
+          bytes,
+          filename: imageFile.name,
+          contentType: MediaType('image', 'jpg'),
+        );
+      } else {
+        multipartFile = await MultipartFile.fromFile(
+          imageFile.path,
+          filename: imageFile.path.split('/').last,
+        );
+      }
+    }
+
     Map<String, dynamic> data = {
       "fullname": fullname,
       "phone": phone,
@@ -63,12 +98,8 @@ class RestaurantApi {
       "description": description,
       "commission_type": commissionType,
       "commission_value": commissionValue,
+      if (multipartFile != null) "image": multipartFile,
     };
-
-    data["image"] = await MultipartFile.fromFile(
-      images[0].path,
-      filename: images[0].path.split('/').last,
-    );
 
     FormData formData = FormData.fromMap(data);
     return dio.post(

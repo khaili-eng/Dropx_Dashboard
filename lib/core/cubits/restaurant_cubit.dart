@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:maadati/core/api/restaurant_api.dart';
 import 'package:maadati/core/states/restaurant_state.dart';
@@ -58,7 +56,7 @@ class RestaurantCubit extends Cubit<RestaurantState> {
     required String workingHoursEnd,
     required String commissionType,
     required String commissionValue,
-    required List<File> images,
+    required dynamic images,
   }) async {
     emit(RestaurantLoading());
     try {
@@ -72,7 +70,7 @@ class RestaurantCubit extends Cubit<RestaurantState> {
         workingHoursEnd: workingHoursEnd,
         commissionType: commissionType,
         commissionValue: commissionValue,
-        images: images,
+        imageFile: images is List ? images.first : images,
       );
       await getAllRestaurants();
     } catch (e) {
@@ -88,7 +86,7 @@ class RestaurantCubit extends Cubit<RestaurantState> {
     required String description,
     required String commissionType,
     required String commissionValue,
-    required List<File> images,
+    required dynamic images,
   }) async {
     emit(RestaurantLoading());
     try {
@@ -100,7 +98,7 @@ class RestaurantCubit extends Cubit<RestaurantState> {
         description: description,
         commissionType: commissionType,
         commissionValue: commissionValue,
-        images: images,
+        imageFile: images is List ? images.first : images,
       );
       await getAllRestaurants();
     } catch (e) {

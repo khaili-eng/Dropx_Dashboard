@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maadati/core/constants/app_color/app_color.dart';
-import 'package:maadati/features/auth/presentation/view/Restaurant_Category.dart';
-import 'package:maadati/features/auth/presentation/view/analis_page.dart';
-import 'package:maadati/features/auth/presentation/view/order_page.dart';
-import 'package:maadati/features/auth/presentation/view/overview_page.dart';
+import 'package:maadati/features/views/analis_page.dart';
+import 'package:maadati/features/views/overview_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -85,12 +83,7 @@ class _HomePageState extends State<HomePage>
       ),
       body: TabBarView(
         controller: tabController,
-        children: const [
-          OverviewPage(),
-          OrdersManagementPage(),
-          RestaurantsByCategoryPage(),
-          AnalysisPage(),
-        ],
+        children: const [OverviewPage(), ReportsPage()],
       ),
     );
   }
