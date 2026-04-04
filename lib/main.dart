@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:maadati/core/api/restaurant_api.dart';
 import 'package:maadati/core/constants/app_color/app_color.dart';
 import 'package:maadati/core/constants/url.dart';
-import 'package:maadati/features/auth/presentation/view/auth_page.dart';
 import 'package:maadati/features/views/home_page.dart';
 import 'package:maadati/core/cubits/restaurant_cubit.dart';
 
@@ -35,7 +34,7 @@ class MaddatiApp extends StatelessWidget {
           colorSchemeSeed: AppColor.color3,
           scaffoldBackgroundColor: AppColor.color1,
         ),
-        home: const AuthPage(),
+        //   home: const AuthPage(),
       ),
     );
   }
