@@ -1,9 +1,12 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:maadati/features/advertesment/presentation/view/advertesment_page.dart';
 import 'package:maadati/features/customers/presentation/view/customers_page.dart';
 import 'package:maadati/features/dashboard/presentation/view/dashboard_page.dart';
 import 'package:maadati/features/drivers/presentation/view/drivers_page.dart';
-
+import 'package:maadati/features/admin_fees/presentation/view/fess_page.dart';
+import 'package:maadati/features/order/presentation/view/order_page.dart';
+import 'package:maadati/features/promocode/presentation/view/promo_code_view.dart';
 import '../../../features/auth/presentation/view/auth_page.dart';
 
 class AppRoute{
@@ -24,6 +27,9 @@ static Map<String,WidgetBuilder> routes = {
   customers:(context)=>CustomersPage(),
   advertisement:(context)=>AdvertesmentPage(),
   drivers:(context)=>DriversPage(),
+  orders: (context) => OrderPage(),
+  promoCode: (context) =>PromoCodeView() ,
+  fees: (context) => FeePage(),
 //  dashboard:(context)=>DashboardPage(),
  // customers:(context)=>ClientPage(),
   //advertisement:(context)=>ProjectPage(),

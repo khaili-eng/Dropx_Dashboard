@@ -1,4 +1,7 @@
+
+
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:maadati/core/constants/app_route/app_route.dart';
@@ -24,10 +27,13 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  
+
+  const MyApp();
 
   @override
   Widget build(BuildContext context) {
+
 
     return BlocBuilder<LocaleCubit, LocaleState>(
       builder: (context, locale) {
@@ -57,3 +63,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
