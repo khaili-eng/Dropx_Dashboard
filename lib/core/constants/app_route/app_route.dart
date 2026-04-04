@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:maadati/features/fees/presentation/view/fess_page.dart';
+import 'package:maadati/features/admin_fees/presentation/view/fess_page.dart';
 
 import 'package:maadati/features/order/presentation/view/order_page.dart';
 import 'package:maadati/features/promoCode/presentation/view/promo_code_view.dart';
@@ -12,6 +12,6 @@ class AppRoute {
   static Map<String, WidgetBuilder> routes = {
     orders: (context) => OrderPage(),
     promoCode: (context) =>PromoCodeView() ,
-    fees: (context) => AdminFeesScreen(),
+    fees: (context) => FeePage(),
   };
 }

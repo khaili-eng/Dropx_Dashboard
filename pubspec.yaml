@@ -40,6 +40,9 @@ dependencies:
   shared_preferences: ^2.5.5
   fl_chart: ^1.2.0
   month_picker_dialog: ^6.7.2
+  dartz: ^0.10.1
+  equatable: ^2.0.8
+  get_it: ^9.2.1
 
 dev_dependencies:
   flutter_test:
