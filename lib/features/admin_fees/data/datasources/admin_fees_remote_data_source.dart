@@ -1,39 +1,37 @@
-import 'package:dio/dio.dart';
 import 'package:maadati/features/admin_fees/data/model/admin_fee.dart';
-import '../../../../core/error/exceptions.dart';
 
-class FeeRemoteDataSource {
-  final Dio dio;
+ abstract class AdminFeesRemoteDataSource {
 
-  FeeRemoteDataSource(this.dio);
+  Future<List<FeeModel>> getadminMonthlyfeesfromdriver();
+  Future<List<FeeModel>> getadminDailyfeesfromdriver();
+  Future<List<FeeModel>> getAdminDailyEarningsFromRestaurants();
+  Future<List<FeeModel>> getAdminMonthlyEarningsFromRestaurants();
+}
 
-  Future<FeeModel> getFees({
-    required String type,
-    required String period,
-    required int year,
-    int? month,
-    int? day,
-  }) async {
-    try {
-      String url;
 
-      if (type == 'driver' && period == 'monthly') {
-        url = '/admin/fee/getadminMonthlyfeesfromdriver/$year/$month';
-      } else if (type == 'driver') {
-        url = '/admin/fee/getadminDailyfeesfromdriver/$year/$month/$day';
-      } else if (type == 'restaurant' && period == 'monthly') {
-        url =
-            '/admin/fee/getAdminMonthlyEarningsFromRestaurants/$year/$month';
-      } else {
-        url =
-            '/admin/fee/getAdminDailyEarningsFromRestaurants/$year/$month/$day';
-      }
+class AdminFeesRemoteDataSourceImpl implements AdminFeesRemoteDataSource{
+  @override
+  Future<List<FeeModel>> getAdminDailyEarningsFromRestaurants() {
+    // TODO: implement getAdminDailyEarningsFromRestaurants
+    throw UnimplementedError();
+  }
 
-      final response = await dio.get(url);
+  @override
+  Future<List<FeeModel>> getAdminMonthlyEarningsFromRestaurants() {
+    // TODO: implement getAdminMonthlyEarningsFromRestaurants
+    throw UnimplementedError();
+  }
 
-      return FeeModel.fromJson(response.data);
-    } on DioException catch (e) {
-      throw ServerException(e.response?.data['message'] ?? 'Server Error');
-    }
+  @override
+  Future<List<FeeModel>> getadminDailyfeesfromdriver() {
+    // TODO: implement getadminDailyfeesfromdriver
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<FeeModel>> getadminMonthlyfeesfromdriver() {
+    // TODO: implement getadminMonthlyfeesfromdriver
+    throw UnimplementedError();
   }
 }
+  

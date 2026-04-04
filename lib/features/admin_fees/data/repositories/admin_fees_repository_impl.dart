@@ -1,28 +1,39 @@
+import 'package:dartz/dartz.dart';
+import 'package:maadati/core/error/exceptions.dart';
 import 'package:maadati/features/admin_fees/data/datasources/admin_fees_remote_data_source.dart';
 import 'package:maadati/features/admin_fees/domain/entities/driver_fee_entity.dart';
 import 'package:maadati/features/admin_fees/domain/repositories/admin_fees_repository.dart';
 
 
 
-class FeeRepositoryImpl implements FeeRepository {
-  final FeeRemoteDataSource remote;
+class FeeRepositoryImpl  extends AdminFeesRepository{
+  final AdminFeesRemoteDataSource remoteDataSource;
 
-  FeeRepositoryImpl(this.remote);
+  FeeRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<FeeEntity> getFees({
-    required String type,
-    required String period,
-    required int year,
-    int? month,
-    int? day,
-  }) {
-    return remote.getFees(
-      type: type,
-      period: period,
-      year: year,
-      month: month,
-      day: day,
-    );
+  Future<Either<ServerException, List<FeeEntity>>> getAdminDailyEarningsFromRestaurants() {
+    // TODO: implement getAdminDailyEarningsFromRestaurants
+    throw UnimplementedError();
   }
+
+  @override
+  Future<Either<ServerException, List<FeeEntity>>> getAdminMonthlyEarningsFromRestaurants() {
+    // TODO: implement getAdminMonthlyEarningsFromRestaurants
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<ServerException, List<FeeEntity>>> getadminDailyfeesfromdriver() {
+    // TODO: implement getadminDailyfeesfromdriver
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<ServerException, List<FeeEntity>>> getadminMonthlyfeesfromdriver() {
+    // TODO: implement getadminMonthlyfeesfromdriver
+    throw UnimplementedError();
+  }
+
+
 }

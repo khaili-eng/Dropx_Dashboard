@@ -4,28 +4,17 @@
 // class GetAdminDailyEarningsFromRestaurants {
 //   final AdminFeesRepository repository;
 
-
+import 'package:dartz/dartz.dart';
+import 'package:maadati/core/error/exceptions.dart';
 import 'package:maadati/features/admin_fees/domain/entities/driver_fee_entity.dart';
 import 'package:maadati/features/admin_fees/domain/repositories/admin_fees_repository.dart';
 
-class GetFees {
-  final FeeRepository repository;
+class GetAdminDailyEarningsFromRestaurants {
+  final AdminFeesRepository repository;
 
-  GetFees(this.repository);
-
-  Future<FeeEntity> call({
-    required String type,
-    required String period,
-    required int year,
-    int? month,
-    int? day,
-  }) {
-    return repository.getFees(
-      type: type,
-      period: period,
-      year: year,
-      month: month,
-      day: day,
-    );
+  GetAdminDailyEarningsFromRestaurants(this.repository);
+  Future<Either<ServerException , List<FeeEntity>>> call()async{
+    return await repository.getAdminDailyEarningsFromRestaurants();
   }
+
 }
