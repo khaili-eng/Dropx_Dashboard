@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:maadati/core/constants/app_route/app_route.dart';
@@ -27,40 +28,38 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  
+
 
   const MyApp();
 
   @override
   Widget build(BuildContext context) {
-
-
     return BlocBuilder<LocaleCubit, LocaleState>(
-      builder: (context, locale) {
-        return BlocProvider(
-          create: (_)=>DriverCubit(DriverRepoImpl(ApiService())),
-          child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Maadati',
-            locale: context.read<LocaleCubit>().currentLocale,
-            supportedLocales: const [
-              Locale('en'),
-              Locale('ar'),
-            ],
-            localizationsDelegates: const [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        builder: (context, locale) {
+          return BlocProvider(
+            create: (_) => DriverCubit(DriverRepoImpl(ApiService())),
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Maadati',
+              locale: context
+                  .read<LocaleCubit>()
+                  .currentLocale,
+              supportedLocales: const [
+                Locale('en'),
+                Locale('ar'),
+              ],
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              theme: ThemeData(
+                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+              ),
+              initialRoute: AppRoute.auth,
+              routes: AppRoute.routes,
             ),
-           initialRoute: AppRoute.auth,
-           routes: AppRoute.routes,
-          ),
-        );
-      },
-    );
+          );
+        });
   }
 }
-
