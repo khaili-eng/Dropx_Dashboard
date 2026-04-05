@@ -1,7 +1,8 @@
-
-
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:maadati/features/promoCode/data/datasources/remote_data_sorces.dart';
+import 'package:maadati/features/promoCode/presentation/manegar/promo_code_cubit.dart';
+import 'package:maadati/features/promoCode/presentation/view/promo_code_view.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -14,6 +15,7 @@ import 'package:maadati/features/drivers/presentation/manager/driver_cubit.dart'
 import 'package:maadati/features/drivers/repo/driver_repo_impl.dart';
 
 void main() {
+
   runApp(
     MultiBlocProvider(
       providers: [
@@ -27,13 +29,15 @@ void main() {
   );
 }
 
-class MyApp extends StatelessWidget {
 
+
+class MyApp extends StatelessWidget {
 
   const MyApp();
 
   @override
   Widget build(BuildContext context) {
+
     return BlocBuilder<LocaleCubit, LocaleState>(
         builder: (context, locale) {
           return BlocProvider(
@@ -61,5 +65,6 @@ class MyApp extends StatelessWidget {
             ),
           );
         });
+
   }
 }

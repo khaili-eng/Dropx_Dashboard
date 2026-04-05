@@ -1,7 +1,6 @@
 
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:maadati/features/admin_fees/domain/usecases/get_admin_daily_earnings_from_restaurants.dart';
 import 'package:maadati/features/admin_fees/presentation/manager/admin_fees_status.dart';
 
 class AdminFeesCubit extends Cubit<AdminFeesState> {
