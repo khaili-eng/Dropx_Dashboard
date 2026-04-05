@@ -8,4 +8,12 @@ class ApiConstants {
       '/admin/fee/getAdminDailyEarningsFromRestaurants/';
   static const String getAdminMonthlyEarningsFromRestaurants =
       '/admin/fee/getAdminMonthlyEarningsFromRestaurants/';
+  static const String getAllPromoCodes =
+      '/admin/fee/getAllPromoCodes/';
+  static const String addPromoCodes =
+      '/admin/fee/getAllPromoCodes/';
+  static const String deletedPromoCodes =
+      '/admin/fee/getAllPromoCodes/';
+  static const String updatePromoCodes =
+      '/admin/fee/getAllPromoCodes/';
 }
