@@ -11,7 +11,7 @@ class AppRoute {
 
   static Map<String, WidgetBuilder> routes = {
     orders: (context) => OrderPage(),
-    promoCode: (context) =>PromoCodeView() ,
-    fees: (context) => FeePage(),
+    promoCode: (context) => PromoCodePage(),
+    fees: (context) => FessPage(),
   };
 }

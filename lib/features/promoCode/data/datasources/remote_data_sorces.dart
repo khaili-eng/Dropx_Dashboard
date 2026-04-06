@@ -14,17 +14,10 @@ abstract class RemoteDataSorces {
 class RemoteDataSorcesImpl implements RemoteDataSorces {
   Dio dio = Dio();
   final String baseUrl = ApiConstants.baseUrl;
-  String myToken = "2|Z0qsMsh3cSKEfHii1MdThgU0yhhiZk9FWqJX9pi0eb6180c0";
+  String myToken = ApiConstants.myToken;
   @override
   Future<Unit> addPromoCode(PromoCodeModel promoCode) {
-    final body = {
-      'code': promoCode.code,
-      'discountType': promoCode.discountType,
-      'discountValue': promoCode.discountValue,
-      'minOrderValue': promoCode.minOrderValue,
-      'maxUses': promoCode.maxUses,
-      'expiryDate': promoCode.expiryDate.toIso8601String(),
-    };
+    final body = {'code': promoCode.code};
     try {
       dio.post(
         "$baseUrl/${ApiConstants.addPromoCodes}",
@@ -62,7 +55,7 @@ class RemoteDataSorcesImpl implements RemoteDataSorces {
 
   @override
   Future<List<PromoCodeModel>> getPromoCodes() async {
-    String myToken = "2|Z0qsMsh3cSKEfHii1MdThgU0yhhiZk9FWqJX9pi0eb6180c0";
+    String myToken = ApiConstants.myToken;
 
     try {
       final response = await dio.get(
@@ -89,14 +82,7 @@ class RemoteDataSorcesImpl implements RemoteDataSorces {
 
   @override
   Future<Unit> updatePromoCode(PromoCodeModel promoCode) {
-    final body = {
-      'code': promoCode.code,
-      'discountType': promoCode.discountType,
-      'discountValue': promoCode.discountValue,
-      'minOrderValue': promoCode.minOrderValue,
-      'maxUses': promoCode.maxUses,
-      'expiryDate': promoCode.expiryDate.toIso8601String(),
-    };
+    final body = {'code': promoCode.code};
     try {
       dio.put(
         "$baseUrl/${ApiConstants.updatePromoCodes}/${promoCode.id}",
@@ -114,7 +100,3 @@ class RemoteDataSorcesImpl implements RemoteDataSorces {
     }
   }
 }
-
-
-  
-

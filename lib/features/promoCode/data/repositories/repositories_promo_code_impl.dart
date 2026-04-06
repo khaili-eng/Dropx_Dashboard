@@ -16,11 +16,11 @@ class RepositoriesPromoCodeImpl extends PromoCodeRepositories {
     final PromoCodeModel promoCodeModel = PromoCodeModel(
       id: promoCode.id,
       code: promoCode.code,
-      discountType: promoCode.discountType,
-      discountValue: promoCode.discountValue,
-      minOrderValue: promoCode.minOrderValue,
-      maxUses: promoCode.maxUses,
-      expiryDate: promoCode.expiryDate,
+      // discountType: promoCode.discountType,
+      // discountValue: promoCode.discountValue,
+      // minOrderValue: promoCode.minOrderValue,
+      // maxUses: promoCode.maxUses,
+      // expiryDate: promoCode.expiryDate,
     );
     try {
       await remoteDataSorces.addPromoCode(promoCodeModel);
@@ -44,7 +44,7 @@ class RepositoriesPromoCodeImpl extends PromoCodeRepositories {
   Future<Either<ServerException, List<PromoCodeEntitiy>>> getPromoCode() async {
     try {
       final remoteData = await remoteDataSorces.getPromoCodes();
-      return Right(remoteData);
+      return Right(remoteData.cast<PromoCodeEntitiy>());
     } on ServerException {
       return Left(ServerException("Failed to fetch promo codes"));
     }
@@ -57,11 +57,6 @@ class RepositoriesPromoCodeImpl extends PromoCodeRepositories {
     final PromoCodeModel promoCodeModel = PromoCodeModel(
       id: promoCode.id,
       code: promoCode.code,
-      discountType: promoCode.discountType,
-      discountValue: promoCode.discountValue,
-      minOrderValue: promoCode.minOrderValue,
-      maxUses: promoCode.maxUses,
-      expiryDate: promoCode.expiryDate,
     );
     try {
       await remoteDataSorces.updatePromoCode(promoCodeModel);

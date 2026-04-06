@@ -1,4 +1,4 @@
-import 'package:maadati/features/admin_fees/domain/entities/driver_fee_entity.dart';
+import 'package:maadati/features/admin_fees/domain/entities/fee_entity.dart';
 
 class FeeModel extends FeeEntity {
   FeeModel({required super.status, required super.date, required super.total});

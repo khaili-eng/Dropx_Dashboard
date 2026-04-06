@@ -8,7 +8,7 @@ class PromoCodeAoi {
   final String baseUrl = ApiConstants.baseUrl;
 
   Future<List<PromoCodeModel>> fetchAllPromoCodes() async {
-    String myToken = "2|Z0qsMsh3cSKEfHii1MdThgU0yhhiZk9FWqJX9pi0eb6180c0";
+    String myToken = ApiConstants.myToken;
 
     try {
       final response = await dio.get(
