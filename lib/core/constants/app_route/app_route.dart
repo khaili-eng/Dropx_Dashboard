@@ -7,6 +7,8 @@ import 'package:maadati/features/drivers/presentation/view/drivers_page.dart';
 import 'package:maadati/features/admin_fees/presentation/view/fess_page.dart';
 import 'package:maadati/features/order/presentation/view/order_page.dart';
 import 'package:maadati/features/promocode/presentation/view/promo_code_view.dart';
+import 'package:maadati/features/views/analis_page.dart';
+import 'package:maadati/features/views/overview_page.dart';
 import '../../../features/auth/presentation/view/auth_page.dart';
 
 class AppRoute{
@@ -15,6 +17,7 @@ static const String dashboard= '/dashboard';
 static const String customers= '/customers';
 static const String advertisement= '/advertisement';
 static const String drivers= '/drivers';
+static const String overview= '/overview';
 static const String orders= '/orders';
 static const String promoCode= '/promoCode';
 static const String fees = '/fees';
@@ -27,8 +30,10 @@ static Map<String,WidgetBuilder> routes = {
   customers:(context)=>CustomersPage(),
   advertisement:(context)=>AdvertesmentPage(),
   drivers:(context)=>DriversPage(),
+  overview:(context)=>OverviewPage(),
   orders: (context) => OrderPage(),
   promoCode: (context) =>PromoCodeView() ,
+  reports:(context)=>ReportsPage(),
   fees: (context) => FeePage(),
 //  dashboard:(context)=>DashboardPage(),
  // customers:(context)=>ClientPage(),
@@ -41,4 +46,5 @@ static Map<String,WidgetBuilder> routes = {
   //settings:(context)=>ProjectPage(),
   // clientProfile:(context)=>ClientProfileDialog(client: client),
 };
+
 }

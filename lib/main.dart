@@ -1,5 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:maadati/core/utils/pref_helper.dart';
+import 'package:maadati/features/auth/data/model/user_mpdel.dart';
+import 'package:maadati/features/order/presentation/cubit/order_cubit.dart';
 import 'package:maadati/features/promoCode/data/datasources/remote_data_sorces.dart';
 import 'package:maadati/features/promoCode/presentation/manegar/promo_code_cubit.dart';
 import 'package:maadati/features/promoCode/presentation/view/promo_code_view.dart';
@@ -14,8 +18,19 @@ import 'package:maadati/features/auth/presentation/view/auth_page.dart';
 import 'package:maadati/features/drivers/presentation/manager/driver_cubit.dart';
 import 'package:maadati/features/drivers/repo/driver_repo_impl.dart';
 
-void main() {
+import 'core/api/commission_api.dart';
+import 'core/api/deliverysetting_api.dart';
+import 'core/api/meal_api.dart';
+import 'core/api/restaurant_api.dart';
+import 'core/cubits/commission_cubit.dart';
+import 'core/cubits/deliverysetting_cubit.dart';
+import 'core/cubits/meal_cubit.dart';
+import 'core/cubits/restaurant_cubit.dart';
+import 'core/cubits/restaurantsDetails_cubit.dart';
 
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  final token = await PrefHelper.getToken();
   runApp(
     MultiBlocProvider(
       providers: [
@@ -24,7 +39,7 @@ void main() {
         ),
 
       ],
-      child: const MyApp(),
+      child:  MyApp(token:token),
     ),
   );
 }
@@ -32,16 +47,32 @@ void main() {
 
 
 class MyApp extends StatelessWidget {
-
-  const MyApp();
+  final String? token;
+  const MyApp({super.key, required this.token}
+ );
 
   @override
   Widget build(BuildContext context) {
 
     return BlocBuilder<LocaleCubit, LocaleState>(
         builder: (context, locale) {
-          return BlocProvider(
-            create: (_) => DriverCubit(DriverRepoImpl(ApiService())),
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => DriverCubit(DriverRepoImpl(ApiService())),),
+              BlocProvider(create: (_) => RestaurantDetailsCubit(RestaurantApi(baseUrl: "http://127.0.0.1:8000/api" ,token: token??""))),
+              BlocProvider(create: (_) => DeliveryCubit(DeliverySettingApi(Dio()))),
+              BlocProvider(create: (_) => CommissionCubit(CommissionApi(baseUrl:  "http://127.0.0.1:8000/api",token: token??""))),
+              BlocProvider(create: (_) => MealCubit(MealApi(Dio()))),
+
+              BlocProvider(create: (_) => RestaurantCubit(RestaurantApi(baseUrl: "http://127.0.0.1:8000/api",token: token??""))..getAllRestaurants()),
+          BlocProvider(
+          create:
+          (context) =>
+          PromoCodeCubit(RemoteDataSorcesImpl())
+          ..remoteDataSorcesImpl.getPromoCodes(),),
+
+            ],
+
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'Maadati',
