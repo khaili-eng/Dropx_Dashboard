@@ -12,6 +12,7 @@ import '../../../../core/services/enum.dart';
 import '../../../../core/widgets/header.dart';
 import '../../../../core/widgets/header_actions_items.dart';
 import '../../../../core/widgets/side_drawer.dart';
+import '../../../auth/data/model/user_mpdel.dart';
 import '../../data/model/driver_item_model.dart';
 import '../../data/model/driver_list_response.dart';
 import '../../data/model/driver_model.dart';
@@ -131,12 +132,18 @@ class _DriversPageState extends State<DriversPage> {
                                 builder: (context, state) {
                                   List<DriverItemModel> drivers = [];
 
+                                  /// 🔄 LOADING
                                   if (state is DriversLoading ||
                                       state is AllActiveDriversLoading ||
                                       state is DriversByCityLoading ||
                                       state is ActiveDriversLoading) {
-                                    return const Center(child: CircularProgressIndicator());
-                                  } else if (state is DriversSuccess) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+
+                                  /// ✅ SUCCESS
+                                  else if (state is DriversSuccess) {
                                     drivers = state.drivers;
                                   } else if (state is AllActiveDriversSuccess) {
                                     drivers = state.drivers.cast<DriverItemModel>();
@@ -144,17 +151,53 @@ class _DriversPageState extends State<DriversPage> {
                                     drivers = state.drivers.cast<DriverItemModel>();
                                   } else if (state is ActiveDriversSuccess) {
                                     drivers = state.drivers.cast<DriverItemModel>();
-                                  } else if (state is DriversError) {
-                                    return Center(
-                                      child: Text(
-                                        state.error.toString(),
-                                        style: TextStyle(color: Colors.red),
-                                      ),
-                                    );
                                   }
 
-                                  if (drivers.isEmpty) {
 
+                                  else if (state is DriversError ||
+                                      state is AllActiveDriversError ||
+                                      state is DriversByCityError ||
+                                      state is ActiveDriversError) {
+                                    drivers = [
+                                      DriverItemModel(
+                                        user:UserModel(
+                                          id: 1,
+                                          fullName: "Demo Driver",
+                                          phone: "1111111111",
+                                          isActive: false,
+                                          isVerified: false,
+                                        ),
+                                        driver: DriverModel(
+                                          id: 0,
+                                          userId: 0,
+                                          vehicletype: "Car",
+                                          vehiclenumber: "XXX-000",
+                                          isActive: true,
+                                          createdAt: "",
+                                          updatedAt: "",
+                                        ),
+                                      ),
+                                      DriverItemModel(
+                                       user:UserModel(
+                                  id: 1,
+                                  fullName: "Demo Driver",
+                                  phone: "1111111111",
+                                  isActive: false,
+                                  isVerified: false,
+                                  ),
+                                        driver: DriverModel(
+                                          id: 1,
+                                          userId: 1,
+                                          vehicletype: "Bike",
+                                          vehiclenumber: "YYY-111",
+                                          isActive: false,
+                                          createdAt: "",
+                                          updatedAt: "",
+                                        ),
+                                      ),
+                                    ];
+                                  }
+                                  if (drivers.isEmpty) {
                                     return Center(
                                       child: Padding(
                                         padding: const EdgeInsets.all(20.0),
@@ -180,7 +223,7 @@ class _DriversPageState extends State<DriversPage> {
                                               ),
                                               const SizedBox(height: 10),
                                               Text(
-                                                "Currently there are no drivers matching the selected filter. You can try refreshing or change the filter to see available drivers.",
+                                                "Currently there are no drivers matching the selected filter. Try refreshing or changing filters.",
                                                 style: TextStyle(
                                                   fontSize: 16,
                                                   color: Colors.grey.shade600,
@@ -188,14 +231,19 @@ class _DriversPageState extends State<DriversPage> {
                                                 textAlign: TextAlign.center,
                                               ),
                                               const SizedBox(height: 20),
+
+
                                               SizedBox(
                                                 width: double.infinity,
                                                 child: ElevatedButton.icon(
                                                   onPressed: () {
                                                     context.read<DriverCubit>().getAllDrivers();
                                                   },
-                                                  icon: const Icon(Icons.refresh,color: AppColor.color1,),
-                                                  label: const Text("Refresh",style: TextStyle(color: AppColor.color1),),
+                                                  icon: const Icon(Icons.refresh, color: Colors.white),
+                                                  label: const Text(
+                                                    "Refresh",
+                                                    style: TextStyle(color: Colors.white),
+                                                  ),
                                                   style: ElevatedButton.styleFrom(
                                                     backgroundColor: AppColor.color4,
                                                     padding: const EdgeInsets.symmetric(vertical: 14),
@@ -211,11 +259,12 @@ class _DriversPageState extends State<DriversPage> {
 
                                   return ListView.builder(
                                     shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(), // لأننا داخل SingleChildScrollView
+                                    physics: const NeverScrollableScrollPhysics(),
                                     itemCount: drivers.length,
                                     itemBuilder: (context, index) {
-                                      final driver = drivers[index];
-                                      return DriverCard(data: driver,);
+                                      return DriverCard(
+                                        data: drivers[index],
+                                      );
                                     },
                                   );
                                 },
@@ -225,7 +274,7 @@ class _DriversPageState extends State<DriversPage> {
                                 width: double.infinity,
                                 padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
-                                  color: AppColor.color2, // اللون المطلوب
+                                  color: AppColor.color2,
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Column(

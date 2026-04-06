@@ -31,20 +31,23 @@ class _SideDrawerState extends State<SideDrawer> {
       case AppRoute.drivers:
         selectedIndex = 3;
         break;
-      case AppRoute.orders:
+        case AppRoute.overview:
         selectedIndex=4;
         break;
-      case AppRoute.promoCode:
+      case AppRoute.orders:
         selectedIndex=5;
         break;
-      case AppRoute.fees:
+      case AppRoute.promoCode:
         selectedIndex=6;
         break;
-      case AppRoute.reports:
+      case AppRoute.fees:
         selectedIndex=7;
         break;
-      case AppRoute.settings:
+      case AppRoute.reports:
         selectedIndex=8;
+        break;
+      case AppRoute.settings:
+        selectedIndex=9;
         break;
     }
   }
@@ -67,21 +70,23 @@ class _SideDrawerState extends State<SideDrawer> {
       case 3:
         Navigator.pushReplacementNamed(context, AppRoute.drivers);
         break;
-
       case 4:
+        Navigator.pushReplacementNamed(context, AppRoute.overview);
+        break;
+      case 5:
         Navigator.pushReplacementNamed(context, AppRoute.orders);
         break;
 
-      case 5:
+      case 6:
         Navigator.pushReplacementNamed(context, AppRoute.promoCode);
         break;
-      case 6:
+      case 7:
         Navigator.pushReplacementNamed(context, AppRoute.fees);
         break;
-      case 7:
+      case 8:
         Navigator.pushReplacementNamed(context, AppRoute.reports);
         break;
-      case 8:
+      case 9:
         Navigator.pushReplacementNamed(context, AppRoute.settings);
         break;
     }
