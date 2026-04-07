@@ -91,7 +91,7 @@ class OrderPageDetails extends StatelessWidget {
 
                     SizedBox(height: 20),
                     CustomText(
-                      text: "${order.barcode}",
+                      text: order.barcode,
                       color: Colors.black,
                       size: 22,
                       fontWeight: FontWeight.bold,

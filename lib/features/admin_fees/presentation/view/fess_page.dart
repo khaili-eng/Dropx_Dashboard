@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:maadati/core/constants/app_color/app_color.dart';
 import 'package:maadati/features/admin_fees/data/datasources/admin_fees_remote_data_source.dart';
-import 'package:maadati/features/admin_fees/data/model/admin_fee.dart';
 import 'package:maadati/features/admin_fees/presentation/manager/admin_fees_cubit.dart';
 import 'package:maadati/features/admin_fees/presentation/manager/admin_fees_status.dart';
 

@@ -4,7 +4,7 @@ import 'package:maadati/features/admin_fees/data/model/admin_fee.dart';
 class AdminFeesStatus extends Equatable {
   const AdminFeesStatus();
   @override
-  // TODO: implement props
+
   List<Object?> get props => [];
 }
 

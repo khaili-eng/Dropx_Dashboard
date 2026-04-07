@@ -1,20 +1,20 @@
-class PromoCodeModel {
-  final int? id;
-  final String? code;
+import 'package:maadati/features/promoCode/domain/entities/promo_code_entitiy.dart';
 
-  PromoCodeModel({this.id, this.code});
+class PromoCodeResponse {
+  final bool status;
+  final List<PromoCode> data;
 
-  PromoCodeModel copyWith({int? id, String? code}) {
-    return PromoCodeModel(
-      id: id ?? this.id,
-      code: code ?? this.code,
-    );
-  }
+  PromoCodeResponse({
+    required this.status,
+    required this.data,
+  });
 
-  factory PromoCodeModel.fromJson(Map<String, dynamic> json) {
-    return PromoCodeModel(
-      id: json['id'],
-      code: json['code'],
+  factory PromoCodeResponse.fromJson(Map<String, dynamic> json) {
+    return PromoCodeResponse(
+      status: json['status'] ?? false,
+      data: (json['data'] as List<dynamic>? ?? [])
+          .map((e) => PromoCode.fromJson(e))
+          .toList(),
     );
   }
 }

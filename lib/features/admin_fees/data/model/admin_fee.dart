@@ -1,7 +1,7 @@
 import 'package:maadati/features/admin_fees/domain/entities/fee_entity.dart';
 
 class FeeModel extends FeeEntity {
-  FeeModel({required super.status, required super.date, required super.total});
+ const FeeModel({required super.status, required super.date, required super.total});
 
   factory FeeModel.fromJson(Map<String, dynamic> json) {
     return FeeModel(

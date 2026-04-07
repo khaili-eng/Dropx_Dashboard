@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:maadati/features/promoCode/data/datasources/remote_data_sorces.dart';
-import 'package:maadati/features/promoCode/data/model/promo_code_model.dart';
+import 'package:maadati/features/promoCode/domain/entities/promo_code_entitiy.dart';
 import 'package:maadati/features/promoCode/presentation/manegar/promo_code_cubit.dart';
 import 'package:maadati/features/promoCode/presentation/manegar/promo_code_status.dart';
 
@@ -13,155 +13,133 @@ class PromoCodePage extends StatefulWidget {
 }
 
 class _PromoCodePageState extends State<PromoCodePage> {
-  final TextEditingController codeController = TextEditingController();
-
   @override
   void initState() {
-    context.read<PromoCodeCubit>().getPromoCodes();
+      print("INIT STATE");
     super.initState();
+    context.read<PromoCubit>().getPromo();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Promo Codes")),
-
-      body: BlocConsumer<PromoCodeCubit, PromoCodeStatus>(
+      body: BlocConsumer<PromoCubit, PromoState>(
         listener: (context, state) {
-          if (state is PromoCodeError) {
+          if (state is PromoError) {
             ScaffoldMessenger.of(
               context,
-            ).showSnackBar(SnackBar(content: Text(state.error)));
-          }
-
-          if (state is PromoCodeAdded ||
-              state is PromoCodeDeleted ||
-              state is PromoCodeUpdated) {
-            context.read<PromoCodeCubit>().getPromoCodes();
+            ).showSnackBar(SnackBar(content: Text(state.message)));
           }
         },
-
         builder: (context, state) {
-          if (state is PromoCodeLoading) {
+          if (state is PromoLoading) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (state is PromoCodeLodded) {
-            final list = state.promoCode;
+          if (state is PromoLoaded) {
+            if (state.data.isEmpty) {
+              return const Center(child: Text("No Promo Codes"));
+            }
 
-            return Column(
-              children: [
-                /// Add Promo Code
-                Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: codeController,
-                          decoration: const InputDecoration(
-                            hintText: "Enter promo code",
-                          ),
+            return ListView.builder(
+              itemCount: state.data.length,
+              itemBuilder: (context, index) {
+                final promo = state.data[index];
+
+                return Card(
+                  margin: const EdgeInsets.all(10),
+                  child: ListTile(
+                    title: Text(promo.code),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Type: ${promo.discountType}"),
+                        Text("Value: ${promo.discountValue}"),
+                        Text("Min: ${promo.minOrderValue}"),
+                        Text("Uses: ${promo.maxUses}"),
+                      ],
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () {
+                            context.read<PromoCubit>().deletePromo(promo.id);
+                          },
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      ElevatedButton(
-                        onPressed: () {
-                          final code = codeController.text;
-
-                          if (code.isEmpty) return;
-
-                          context.read<PromoCodeCubit>().addPromoCode(
-                            PromoCodeModel(code: code),
-                          );
-
-                          codeController.clear();
-                        },
-                        child: const Text("Add"),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-
-                /// List
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: list.length,
-                    itemBuilder: (context, index) {
-                      final promo = list[index];
-
-                      return ListTile(
-                        title: Text(promo.code ?? ""),
-
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            /// Update
-                            IconButton(
-                              icon: const Icon(Icons.edit),
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (_) {
-                                    final controller = TextEditingController(
-                                      text: promo.code,
-                                    );
-
-                                    return AlertDialog(
-                                      title: const Text("Update"),
-                                      content: TextField(
-                                        controller: controller,
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: const Text("Cancel"),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            context
-                                                .read<PromoCodeCubit>()
-                                                .updatePromoCode(
-                                                  promo.copyWith(
-                                                    code: controller.text,
-                                                  ),
-                                                );
-
-                                            Navigator.pop(context);
-                                          },
-                                          child: const Text("Save"),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                            ),
-
-                            /// Delete
-                            IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () {
-                                context.read<PromoCodeCubit>().deletePromoCode(
-                                  promo.id!,
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
+                );
+              },
             );
           }
 
           return const Center(child: Text("No Data"));
         },
       ),
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showAddDialog(context);
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
+}
+
+void _showAddDialog(BuildContext context) {
+  final codeController = TextEditingController();
+  final valueController = TextEditingController();
+
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text("Add Promo Code"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: codeController,
+              decoration: const InputDecoration(labelText: "Code"),
+            ),
+            TextField(
+              controller: valueController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(labelText: "Value"),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancel"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              final promo = PromoCode(
+                id: 0,
+                code: codeController.text,
+                discountType: "percentage",
+                discountValue: double.parse(valueController.text),
+                minOrderValue: 0,
+                maxUses: 10,
+                expiryDate: DateTime.now(),
+                isActive: true,
+              );
+
+              context.read<PromoCubit>().addPromo(promo);
+
+              Navigator.pop(context);
+            },
+            child: const Text("Save"),
+          ),
+        ],
+      );
+    },
+  );
 }

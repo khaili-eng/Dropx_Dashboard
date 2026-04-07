@@ -28,7 +28,6 @@ class ApiService {
         throw Exception("فشل في الوصول للسيرفر");
       }
     } on DioException catch (e) {
-      print("Error Data: ${e.response?.data}");
       throw Exception("خطأ من السيرفر: ${e.response?.statusCode}");
     }
   }

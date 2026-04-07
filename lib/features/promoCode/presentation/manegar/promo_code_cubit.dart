@@ -1,49 +1,56 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:maadati/features/promoCode/data/datasources/remote_data_sorces.dart';
-import 'package:maadati/features/promoCode/data/model/promo_code_model.dart';
+import 'package:maadati/features/promoCode/domain/entities/promo_code_entitiy.dart';
 import 'package:maadati/features/promoCode/presentation/manegar/promo_code_status.dart';
 
-class PromoCodeCubit extends Cubit<PromoCodeStatus> {
-  final RemoteDataSorcesImpl remoteDataSorcesImpl;
-  PromoCodeCubit(this.remoteDataSorcesImpl) : super(PromoCodeInitial());
+class PromoCubit extends Cubit<PromoState> {
+   
+  final PromoRemoteDataSource remote;
 
-  Future<void> getPromoCodes() async {
-    emit(PromoCodeLoading());
+    PromoCubit(this.remote) : super(PromoInitial()) {
+    print("PROMO CUBIT CREATED"); // 🔥
+  }
+  
+
+  Future<void> getPromo() async {
+      print("GET PROMO CALLED 🔥"); 
+    emit(PromoLoading());
     try {
-      final promoCodes = await remoteDataSorcesImpl.getPromoCodes();
-      emit(PromoCodeLodded(promoCode: promoCodes));
+      final data = await remote.getAll();
+      print("DATA FROM API => $data");
+      emit(PromoLoaded(data));
     } catch (e) {
-      emit(PromoCodeError(error: e.toString()));
+      emit(PromoError(e.toString()));
     }
   }
 
-  Future<void> addPromoCode(PromoCodeModel promoCode) async {
-    emit(PromoCodeLoading());
+  Future<void> addPromo(PromoCode promo) async {
+    emit(PromoLoading());
     try {
-      await remoteDataSorcesImpl.addPromoCode(promoCode);
-      emit(const PromoCodeAdded(message: "Promo code added successfully"));
+      await remote.add(promo);
+      getPromo();
     } catch (e) {
-      emit(PromoCodeError(error: e.toString()));
+      emit(PromoError(e.toString()));
     }
   }
 
-  Future<void> deletePromoCode(int id) async {
-    emit(PromoCodeLoading());
+  Future<void> deletePromo(int id) async {
+    emit(PromoLoading());
     try {
-      await remoteDataSorcesImpl.deletePromoCode(id);
-      emit(const PromoCodeDeleted(message: "Promo code deleted successfully"));
+      await remote.delete(id);
+      getPromo();
     } catch (e) {
-      emit(PromoCodeError(error: e.toString()));
+      emit(PromoError(e.toString()));
     }
   }
 
-  Future<void> updatePromoCode(PromoCodeModel promoCode) async {
-    emit(PromoCodeLoading());
+  Future<void> updatePromo(PromoCode promo) async {
+    emit(PromoLoading());
     try {
-      await remoteDataSorcesImpl.updatePromoCode(promoCode);
-      emit(const PromoCodeUpdated(message: "Promo code updated successfully"));
+      await remote.update(promo);
+      getPromo();
     } catch (e) {
-      emit(PromoCodeError(error: e.toString()));
+      emit(PromoError(e.toString()));
     }
   }
 }
