@@ -1,39 +1,30 @@
+import 'package:equatable/equatable.dart';
+import 'package:maadati/features/admin_fees/data/model/admin_fee.dart';
 
+abstract class AdminFeesStatus extends Equatable {
+  const AdminFeesStatus();
+  @override
 
-class AdminFeesState {
-  final double? driverMonthly;
-  final double? driverDaily;
-  final double? restaurantMonthly;
-  final double? restaurantDaily;
-
-  final bool loading;
-
-  final String? error;
-
-  AdminFeesState({
-    this.driverMonthly,
-    this.driverDaily,
-    this.restaurantMonthly,
-    this.restaurantDaily,
-    this.loading = false,
-    this.error,
-  });
-
-  AdminFeesState copyWith({
-    double? driverMonthly,
-    double? driverDaily,
-    double? restaurantMonthly,
-    double? restaurantDaily,
-    bool? loading,
-    String? error,
-  }) {
-    return AdminFeesState(
-      driverMonthly: driverMonthly ?? this.driverMonthly,
-      driverDaily: driverDaily ?? this.driverDaily,
-      restaurantMonthly: restaurantMonthly ?? this.restaurantMonthly,
-      restaurantDaily: restaurantDaily ?? this.restaurantDaily,
-      loading: loading ?? this.loading,
-      error: error,
-    );
-  }
+  List<Object?> get props => [];
 }
+
+class AdminFeesInitial extends AdminFeesStatus{}
+
+
+class AdminFeesLoading extends AdminFeesStatus {}
+
+class AdminFeesLodded extends AdminFeesStatus {
+  final List<FeeModel> adminFees;
+ const AdminFeesLodded({required this.adminFees});
+   @override
+  List<Object?> get props => [adminFees];
+}
+class AdminFeesError extends AdminFeesStatus {
+  final String error;
+const  AdminFeesError({required this.error});
+@override
+  List<Object?> get props => [error];
+
+
+}
+

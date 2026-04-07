@@ -19,7 +19,9 @@ class OrderPage extends StatelessWidget {
     SizeConfig().init(context);
 
     return BlocProvider(
-      create: (_)=>OrderCubit(ApiService()),
+
+      create: (context) => OrderCubit(ApiService()),
+
       child: Scaffold(
         appBar: AppBar(
           shadowColor: Colors.transparent,
@@ -42,7 +44,7 @@ class OrderPage extends StatelessWidget {
         ),
         key: drawerKey,
         backgroundColor: Colors.white,
-      
+
         body: const SafeArea(child: OrderContent()),
       ),
     );

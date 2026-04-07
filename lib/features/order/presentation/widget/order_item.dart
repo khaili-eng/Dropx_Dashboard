@@ -31,14 +31,14 @@ class OrderItem extends StatelessWidget {
           ),
         );
       },
-      child: Container(
+      child: SizedBox(
         height: 100,
         width: double.infinity,
         child: Row(
           children: [
             CircleAvatar(
-              child: Text("${order.userId}"),
               backgroundColor: AppColor.color3,
+              child: Text("${order.userId}"),
             ),
             SizedBox(width: 50),
             Column(

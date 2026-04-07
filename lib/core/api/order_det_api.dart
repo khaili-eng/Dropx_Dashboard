@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:maadati/core/api/network/api_constants.dart';
 import 'package:maadati/core/constants/end_point/end_points.dart';
 
 
@@ -11,7 +12,7 @@ class ApiServiceDet {
 
   Future<List<OrderData>> getOrderDetails(int id) async {
 
-    String myToken = "2|Z0qsMsh3cSKEfHii1MdThgU0yhhiZk9FWqJX9pi0eb6180c0";
+    String myToken = ApiConstants.myToken;
     // String myToken = PrefHelper.getToken() as String;
 
     try {

@@ -1,134 +1,149 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:maadati/core/constants/app_color/app_color.dart';
-import 'package:maadati/features/order_det/presentation/widget/custom_text.dart';
+import 'package:maadati/features/promoCode/domain/entities/promo_code_entitiy.dart';
 import 'package:maadati/features/promoCode/presentation/manegar/promo_code_cubit.dart';
 import 'package:maadati/features/promoCode/presentation/manegar/promo_code_status.dart';
 
-class PromoCodeView extends StatelessWidget {
-  const PromoCodeView({super.key});
+import '../../domain/entities/promo_code_entitiy.dart';
+import '../manegar/promo_code_cubit.dart';
+import '../manegar/promo_code_status.dart';
+
+class PromoCodePage extends StatefulWidget {
+  const PromoCodePage({super.key});
+
+  @override
+  State<PromoCodePage> createState() => _PromoCodePageState();
+}
+
+class _PromoCodePageState extends State<PromoCodePage> {
+  @override
+  void initState() {
+      print("INIT STATE");
+    super.initState();
+    context.read<PromoCubit>().getPromo();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: CustomText(text: "Promo Code ", color: Colors.white),
-        backgroundColor: AppColor.color3,
-      ),
-      body: BlocBuilder<PromoCodeCubit, PromoCodeStatus>(
+      appBar: AppBar(title: const Text("Promo Codes")),
+      body: BlocConsumer<PromoCubit, PromoState>(
+        listener: (context, state) {
+          if (state is PromoError) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
+          }
+        },
         builder: (context, state) {
-          if (state is PromoCodeLoading) {
+          if (state is PromoLoading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (state is PromoCodeLodded) {
-            final promoCodes = state.promoCode;
+          }
+
+          if (state is PromoLoaded) {
+            if (state.data.isEmpty) {
+              return const Center(child: Text("No Promo Codes"));
+            }
+
             return ListView.builder(
-              itemCount: promoCodes.length,
+              itemCount: state.data.length,
               itemBuilder: (context, index) {
-                final promo = promoCodes[index];
-                return ListTile(
-                  title: Text(promo.code),
-                  subtitle: Text('Discount: ${promo.discountValue}%'),
+                final promo = state.data[index];
+
+                return Card(
+                  margin: const EdgeInsets.all(10),
+                  child: ListTile(
+                    title: Text(promo.code),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Type: ${promo.discountType}"),
+                        Text("Value: ${promo.discountValue}"),
+                        Text("Min: ${promo.minOrderValue}"),
+                        Text("Uses: ${promo.maxUses}"),
+                      ],
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () {
+                            context.read<PromoCubit>().deletePromo(promo.id);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                 );
               },
             );
-          } else if (state is PromoCodeError) {
-            return Center(child: Text(state.error));
-          } else {
-            return const Center(child: Text('No data available'));
           }
+
+          return const Center(child: Text("No Data"));
         },
+      ),
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showAddDialog(context);
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
 }
 
+void _showAddDialog(BuildContext context) {
+  final codeController = TextEditingController();
+  final valueController = TextEditingController();
 
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text("Add Promo Code"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: codeController,
+              decoration: const InputDecoration(labelText: "Code"),
+            ),
+            TextField(
+              controller: valueController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(labelText: "Value"),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancel"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              final promo = PromoCode(
+                id: 0,
+                code: codeController.text,
+                discountType: "percentage",
+                discountValue: double.parse(valueController.text),
+                minOrderValue: 0,
+                maxUses: 10,
+                expiryDate: DateTime.now(),
+                isActive: true,
+              );
 
+              context.read<PromoCubit>().addPromo(promo);
 
-
-  
-
-
-//     return BlocProvider(
-//       create: (context) => PromoCubit(PromoService())..getPromoCodes(),
-//       child: Scaffold(
-//         appBar: AppBar(title: Text('إدارة البرومو كودات')),
-//         body: BlocConsumer<PromoCubit, PromoState>(
-//           listener: (context, state) {
-//             if (state is PromoAdded) {
-//               ScaffoldMessenger.of(context).showSnackBar(
-//                 SnackBar(content: Text(state.message)),
-//               );
-//             } else if (state is PromoUpdated) {
-//               ScaffoldMessenger.of(context).showSnackBar(
-//                 SnackBar(content: Text(state.message)),
-//               );
-//             } else if (state is PromoDeleted) {
-//               ScaffoldMessenger.of(context).showSnackBar(
-//                 SnackBar(content: Text(state.message)),
-//               );
-//             } else if (state is PromoError) {
-//               ScaffoldMessenger.of(context).showSnackBar(
-//                 SnackBar(content: Text(state.error)),
-//               );
-//             }
-//           },
-//           builder: (context, state) {
-//             if (state is PromoLoading) {
-//               return Center(child: CircularProgressIndicator());
-//             } else if (state is PromoLoaded) {
-//               return ListView.builder(
-//                 itemCount: state.promoCodes.length,
-//                 itemBuilder: (context, index) {
-//                   final promo = state.promoCodes[index];
-//                   return ListTile(
-//                     title: Text(promo.code),
-//                     subtitle: Text('خصم: ${promo.discount}%'),
-//                     trailing: IconButton(
-//                       icon: Icon(Icons.delete),
-//                       onPressed: () {
-//                         context.read<PromoCubit>().deletePromoCode(promo.id);
-//                       },
-//                     ),
-//                     onTap: () {
-//                       // فتح صفحة التعديل
-//                       _showEditDialog(context, promo);
-//                     },
-//                   );
-//                 },
-//               );
-//             } else {
-//               return Center(child: Text('لا توجد بيانات'));
-//             }
-//           },
-//         ),
-//         floatingActionButton: FloatingActionButton(
-//           child: Icon(Icons.add),
-//           onPressed: () => _showAddDialog(context),
-//         ),
-//       ),
-//     );
-//   }
-  
-//   void _showAddDialog(BuildContext context) {
-//     // نافذة لإضافة برومو كود جديد
-//     showDialog(
-//       context: context,
-//       builder: (context) => AlertDialog(
-//         title: Text('إضافة برومو كود'),
-//         content: AddPromoForm(),
-//       ),
-//     );
-//   }
-  
-//   void _showEditDialog(BuildContext context, PromoCode promo) {
-//     // نافذة لتعديل برومو كود
-//     showDialog(
-//       context: context,
-//       builder: (context) => AlertDialog(
-//         title: Text('تعديل برومو كود'),
-//         content: EditPromoForm(promoCode: promo),
-//       ),
-//     );
-//   }
-// }
+              Navigator.pop(context);
+            },
+            child: const Text("Save"),
+          ),
+        ],
+      );
+    },
+  );
+}

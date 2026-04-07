@@ -1,35 +1,29 @@
 import 'package:dio/dio.dart';
-import 'package:maadati/core/api/network/api_constants.dart';
-import 'package:maadati/core/error/exceptions.dart';
-import 'package:maadati/features/promoCode/data/model/promo_code_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class PromoCodeAoi {
-  Dio dio = Dio();
-  final String baseUrl = ApiConstants.baseUrl;
+class DioClient {
+  final Dio dio = Dio();
 
-  Future<List<PromoCodeModel>> fetchAllPromoCodes() async {
-    String myToken = "2|Z0qsMsh3cSKEfHii1MdThgU0yhhiZk9FWqJX9pi0eb6180c0";
+  DioClient() {
+    dio.options.baseUrl = "http://127.0.0.1:8000/api/admin/";
 
-    try {
-      final response = await dio.get(
-        "$baseUrl/${ApiConstants.getAllPromoCodes}",
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          final prefs = await SharedPreferences.getInstance();
+          final token = "1|o2DPf3OMgAs6uoXrvc69rcPCMAPATU6Tz4htJoEb6856278d";
 
-        options: Options(
-          headers: {
-            'Accept': 'application/json',
-            'Authorization': 'Bearer $myToken',
-          },
-        ),
-      );
+          print("AUTO TOKEN => $token");
 
-      if (response.statusCode == 200) {
-        List<dynamic> data = response.data['data'];
-        return data.map((json) => PromoCodeModel.fromJson(json)).toList();
-      } else {
-        throw Exception("فشل في الوصول للسيرفر");
-      }
-    } on DioException catch (e) {
-      throw ServerException("");
-    }
+          options.headers["Accept"] = "application/json";
+
+          if (token.isNotEmpty) {
+            options.headers["Authorization"] = "Bearer $token";
+          }
+
+          return handler.next(options);
+        },
+      ),
+    );
   }
 }

@@ -1,5 +1,7 @@
 class EndPoints {
+  // ignore: constant_identifier_names
   static const String AllOrder = "/admin/AllOrders";
+  // ignore: non_constant_identifier_names
   static String OrderDet(int userId) {
     return "/admin/orderDetails/$userId";
   }

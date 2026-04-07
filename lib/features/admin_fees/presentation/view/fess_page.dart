@@ -1,173 +1,59 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:maadati/core/constants/app_color/app_color.dart';
+import 'package:maadati/features/admin_fees/data/datasources/admin_fees_remote_data_source.dart';
 import 'package:maadati/features/admin_fees/presentation/manager/admin_fees_cubit.dart';
 import 'package:maadati/features/admin_fees/presentation/manager/admin_fees_status.dart';
 
-class FeePage extends StatefulWidget {
-  const FeePage({super.key});
-
-  @override
-  State<FeePage> createState() => _FeePageState();
-}
-
-class _FeePageState extends State<FeePage> {
-  DateTime selectedDate = DateTime.now();
-
-  @override
-  void initState() {
-    super.initState();
-
-    Future.microtask(() {
-      context.read<AdminFeesCubit>().loadAll(selectedDate);
-    });
-  }
-
-  void pickDate() async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2030),
-    );
-
-    if (picked != null) {
-      setState(() => selectedDate = picked);
-
-      context.read<AdminFeesCubit>().loadAll(selectedDate);
-    }
-  }
+class FessPage extends StatelessWidget {
+  const FessPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Admin Dashboard"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.date_range),
-            onPressed: pickDate,
-          )
-        ],
-      ),
-      body: BlocBuilder<AdminFeesCubit, AdminFeesState>(
-        builder: (context, state) {
-          if (state.error != null) {
-            return Center(
-              child: Text(
-                state.error!,
-                style: const TextStyle(color: Colors.red),
-              ),
-            );
-          }
-
-          return Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                _buildHeader(state.loading),
-
-                const SizedBox(height: 16),
-
-                Expanded(
-                  child: GridView(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
-                      childAspectRatio: 1.1,
-                    ),
-                    children: [
-                      _card(
-                        "Driver Monthly",
-                        state.driverMonthly,
-                        Colors.blue,
-                      ),
-                      _card(
-                        "Driver Daily",
-                        state.driverDaily,
-                        Colors.orange,
-                      ),
-                      _card(
-                        "Restaurant Monthly",
-                        state.restaurantMonthly,
-                        Colors.green,
-                      ),
-                      _card(
-                        "Restaurant Daily",
-                        state.restaurantDaily,
-                        Colors.red,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildHeader(bool loading) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        if (loading)
-          const SizedBox(
-            width: 18,
-            height: 18,
-            child: CircularProgressIndicator(strokeWidth: 2),
-          )
-        else
-          ElevatedButton(
-            onPressed: () {
-              context.read<AdminFeesCubit>().loadAll(selectedDate);
-            },
-            child: const Text("Refresh"),
-          )
-      ],
-    );
-  }
-
-  Widget _card(String title, double? value, Color color) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: color),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: color,
-              fontWeight: FontWeight.bold,
-            ),
+        shadowColor: Colors.transparent,
+        backgroundColor: AppColor.color4,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20),
           ),
-          const SizedBox(height: 12),
-
-          if (value == null)
-            const CircularProgressIndicator()
-          else
-            Text(
-              value.toString(),
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-        ],
+        ),
+        toolbarHeight: 150,
+        elevation: 0,
+        title: Center(
+          child: Text(
+            "Admin Fees",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
+      body: BlocProvider(
+        create: (context) => AdminFeesCubit(AdminFeesRemoteDataSourceImpl()),
+        child: BlocBuilder<AdminFeesCubit, AdminFeesStatus>(
+          builder: (context, state) {
+            if (state is AdminFeesInitial) {
+              return Center(child: Text("Press the button to load fees"));
+            } else if (state is AdminFeesLoading) {
+              return Center(child: CircularProgressIndicator());
+            } else if (state is AdminFeesLodded) {
+              return ListView.builder(
+                itemCount: state.adminFees.length,
+                itemBuilder: (context, index) {
+                  final fee = state.adminFees[index];
+                  return ListTile(
+                    title: Text("Fee Toltal: ${fee.date}"),
+                    subtitle: Text("Date: ${fee.total}"),
+                  );
+                },
+              );
+            } else if (state is AdminFeesError) {
+              return Center(child: Text("Error: ${state.error}"));
+            }
+            return Container();
+          },
+        ),
       ),
     );
   }

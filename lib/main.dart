@@ -1,10 +1,16 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:maadati/core/utils/pref_helper.dart';
 import 'package:maadati/features/auth/data/model/user_mpdel.dart';
 import 'package:maadati/features/order/presentation/cubit/order_cubit.dart';
+
+import 'package:maadati/core/api/network/dio_client.dart';
+import 'package:maadati/core/api/promo_code_aoi.dart';
+
 import 'package:maadati/features/promoCode/data/datasources/remote_data_sorces.dart';
+import 'package:maadati/features/promoCode/domain/entities/promo_code_entitiy.dart';
 import 'package:maadati/features/promoCode/presentation/manegar/promo_code_cubit.dart';
 import 'package:maadati/features/promoCode/presentation/view/promo_code_view.dart';
 
@@ -27,6 +33,8 @@ import 'core/cubits/deliverysetting_cubit.dart';
 import 'core/cubits/meal_cubit.dart';
 import 'core/cubits/restaurant_cubit.dart';
 import 'core/cubits/restaurantsDetails_cubit.dart';
+import 'features/promocode/data/datasources/remote_data_sorces.dart';
+import 'features/promocode/presentation/manegar/promo_code_cubit.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,29 +55,39 @@ void main() async{
 
 
 class MyApp extends StatelessWidget {
+
   final String? token;
   const MyApp({super.key, required this.token}
  );
 
   @override
   Widget build(BuildContext context) {
-
+    final dioClient = DioClient(Dio() as String);
     return BlocBuilder<LocaleCubit, LocaleState>(
         builder: (context, locale) {
           return MultiBlocProvider(
             providers: [
-              BlocProvider(create: (_) => DriverCubit(DriverRepoImpl(ApiService())),),
-              BlocProvider(create: (_) => RestaurantDetailsCubit(RestaurantApi(baseUrl: "http://127.0.0.1:8000/api" ,token: token??""))),
-              BlocProvider(create: (_) => DeliveryCubit(DeliverySettingApi(Dio()))),
-              BlocProvider(create: (_) => CommissionCubit(CommissionApi(baseUrl:  "http://127.0.0.1:8000/api",token: token??""))),
+              BlocProvider(
+                create: (_) => DriverCubit(DriverRepoImpl(ApiService())),),
+              BlocProvider(create: (_) =>
+                  RestaurantDetailsCubit(RestaurantApi(
+                      baseUrl: "http://127.0.0.1:8000/api",
+                      token: token ?? ""))),
+              BlocProvider(
+                  create: (_) => DeliveryCubit(DeliverySettingApi(Dio()))),
+              BlocProvider(create: (_) =>
+                  CommissionCubit(CommissionApi(
+                      baseUrl: "http://127.0.0.1:8000/api",
+                      token: token ?? ""))),
               BlocProvider(create: (_) => MealCubit(MealApi(Dio()))),
 
-              BlocProvider(create: (_) => RestaurantCubit(RestaurantApi(baseUrl: "http://127.0.0.1:8000/api",token: token??""))..getAllRestaurants()),
-          BlocProvider(
-          create:
-          (context) =>
-          PromoCodeCubit(RemoteDataSorcesImpl())
-          ..remoteDataSorcesImpl.getPromoCodes(),),
+              BlocProvider(create: (_) =>
+              RestaurantCubit(RestaurantApi(
+                  baseUrl: "http://127.0.0.1:8000/api", token: token ?? ""))
+                ..getAllRestaurants()),
+              BlocProvider(
+                create: (_) =>
+                    PromoCubit(PromoRemoteDataSource(dioClient.dio)),)
 
             ],
 
@@ -96,6 +114,5 @@ class MyApp extends StatelessWidget {
             ),
           );
         });
-
   }
 }

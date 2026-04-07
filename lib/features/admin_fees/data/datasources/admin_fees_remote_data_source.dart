@@ -13,7 +13,7 @@ abstract class AdminFeesRemoteDataSource {
 class AdminFeesRemoteDataSourceImpl implements AdminFeesRemoteDataSource {
   Dio dio = Dio();
   final String baseUrl = ApiConstants.baseUrl;
-  String myToken = "2|Z0qsMsh3cSKEfHii1MdThgU0yhhiZk9FWqJX9pi0eb6180c0";
+  String myToken = ApiConstants.myToken;
   @override
   Future<List<FeeModel>> getAdminDailyEarningsFromRestaurants() async {
     try {

@@ -1,120 +1,61 @@
-import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:maadati/core/api/network/api_constants.dart';
-import 'package:maadati/core/error/exceptions.dart';
 import 'package:maadati/features/promoCode/data/model/promo_code_model.dart';
+import 'package:maadati/features/promoCode/domain/entities/promo_code_entitiy.dart';
 
-abstract class RemoteDataSorces {
-  Future<List<PromoCodeModel>> getPromoCodes();
-  Future<Unit> addPromoCode(PromoCodeModel promoCode);
-  Future<Unit> deletePromoCode(int id);
-  Future<Unit> updatePromoCode(PromoCodeModel promoCode);
+import '../../domain/entities/promo_code_entitiy.dart';
+import '../model/promo_code_model.dart';
+
+class PromoRemoteDataSource {
+  final Dio dio;
+
+  PromoRemoteDataSource(this.dio);
+
+  final String baseUrl = "http://127.0.0.1:8000/api/admin";
+  final String myToken = "";
+
+  Options _headers(){
+      print("TOKEN => $myToken");
+    return Options(
+    headers: {'Accept': 'application/json', 'Authorization': 'Bearer $myToken'},
+  );
 }
-
-class RemoteDataSorcesImpl implements RemoteDataSorces {
-  Dio dio = Dio();
-  final String baseUrl = ApiConstants.baseUrl;
-  String myToken = "2|Z0qsMsh3cSKEfHii1MdThgU0yhhiZk9FWqJX9pi0eb6180c0";
-  @override
-  Future<Unit> addPromoCode(PromoCodeModel promoCode) {
-    final body = {
-      'code': promoCode.code,
-      'discountType': promoCode.discountType,
-      'discountValue': promoCode.discountValue,
-      'minOrderValue': promoCode.minOrderValue,
-      'maxUses': promoCode.maxUses,
-      'expiryDate': promoCode.expiryDate.toIso8601String(),
-    };
+  Future<List<PromoCode>> getAll() async {
     try {
-      dio.post(
-        "$baseUrl/${ApiConstants.addPromoCodes}",
-        data: body,
-        options: Options(
-          headers: {
-            'Accept': 'application/json',
-            'Authorization': 'Bearer $myToken',
-          },
-        ),
-      );
-      return Future.value(unit);
-    } on DioException catch (e) {
-      throw ServerException(e.toString());
+      print("CALLING API...");
+
+      final res = await dio.get("/getPromoCode");
+
+      print("STATUS CODE => ${res.statusCode}");
+      print("RAW RESPONSE => ${res.data}");
+
+      final model = PromoCodeResponse.fromJson(res.data);
+
+      print("DATA LENGTH => ${model.data.length}");
+
+      return model.data;
+    } catch (e) {
+      print("API ERROR => $e");
+      rethrow;
     }
   }
 
-  @override
-  Future<Unit> deletePromoCode(int id) {
-    try {
-      dio.delete(
-        "$baseUrl/${ApiConstants.deletedPromoCodes}/$id",
-        options: Options(
-          headers: {
-            'Accept': 'application/json',
-            'Authorization': 'Bearer $myToken',
-          },
-        ),
-      );
-      return Future.value(unit);
-    } on DioException catch (e) {
-      throw ServerException(e.toString());
-    }
+  Future<void> add(PromoCode promo) async {
+    await dio.post(
+      "$baseUrl/AddPromoCode",
+      data: promo.toJson(),
+      options: _headers(),
+    );
   }
 
-  @override
-  Future<List<PromoCodeModel>> getPromoCodes() async {
-    String myToken = "2|Z0qsMsh3cSKEfHii1MdThgU0yhhiZk9FWqJX9pi0eb6180c0";
-
-    try {
-      final response = await dio.get(
-        "$baseUrl/${ApiConstants.getAllPromoCodes}",
-
-        options: Options(
-          headers: {
-            'Accept': 'application/json',
-            'Authorization': 'Bearer $myToken',
-          },
-        ),
-      );
-
-      if (response.statusCode == 200) {
-        List<dynamic> data = response.data['data'];
-        return data.map((json) => PromoCodeModel.fromJson(json)).toList();
-      } else {
-        throw Exception("فشل في الوصول للسيرفر");
-      }
-    } on DioException catch (e) {
-      throw ServerException(e.toString());
-    }
+  Future<void> delete(int id) async {
+    await dio.delete("$baseUrl/DeletePromoCode/$id", options: _headers());
   }
 
-  @override
-  Future<Unit> updatePromoCode(PromoCodeModel promoCode) {
-    final body = {
-      'code': promoCode.code,
-      'discountType': promoCode.discountType,
-      'discountValue': promoCode.discountValue,
-      'minOrderValue': promoCode.minOrderValue,
-      'maxUses': promoCode.maxUses,
-      'expiryDate': promoCode.expiryDate.toIso8601String(),
-    };
-    try {
-      dio.put(
-        "$baseUrl/${ApiConstants.updatePromoCodes}/${promoCode.id}",
-        data: body,
-        options: Options(
-          headers: {
-            'Accept': 'application/json',
-            'Authorization': 'Bearer $myToken',
-          },
-        ),
-      );
-      return Future.value(unit);
-    } on DioException catch (e) {
-      throw ServerException(e.toString());
-    }
+  Future<void> update(PromoCode promo) async {
+    await dio.put(
+      "$baseUrl/UpdatePromoCode/${promo.id}",
+      data: promo.toJson(),
+      options: _headers(),
+    );
   }
 }
-
-
-  
-

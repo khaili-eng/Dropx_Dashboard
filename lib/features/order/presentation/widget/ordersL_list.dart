@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
 
+// ignore_for_file: file_names
+
+import 'package:flutter/material.dart';
 import 'package:maadati/features/order/presentation/widget/order_item.dart';
 
 class OrdersList extends StatelessWidget {
@@ -19,14 +21,7 @@ class OrdersList extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // Text(
-          //   "My Orders",
-          //   style: TextStyle(
-          //     fontSize: 20,
-          //     fontWeight: FontWeight.bold,
-          //     color: Colors.white,
-          //   ),
-          // ),
+        
           const SizedBox(height: 20),
 
           ListView.separated(

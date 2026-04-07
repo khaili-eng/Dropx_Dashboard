@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:maadati/core/api/network/api_constants.dart';
 import 'package:maadati/features/order/data/model/order_model.dart';
 
 class ApiService {
@@ -7,7 +8,7 @@ class ApiService {
   final String baseUrl = "http://127.0.0.1:8000/api";
 
   Future<List<Order>> fetchAllOrders() async {
-    String myToken = "2|Z0qsMsh3cSKEfHii1MdThgU0yhhiZk9FWqJX9pi0eb6180c0";
+    String myToken = ApiConstants.myToken;
 
     try {
       final response = await _dio.get(
@@ -27,7 +28,6 @@ class ApiService {
         throw Exception("فشل في الوصول للسيرفر");
       }
     } on DioException catch (e) {
-      print("Error Data: ${e.response?.data}");
       throw Exception("خطأ من السيرفر: ${e.response?.statusCode}");
     }
   }

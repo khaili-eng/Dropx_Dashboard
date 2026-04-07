@@ -10,6 +10,7 @@ import 'package:maadati/features/promocode/presentation/view/promo_code_view.dar
 import 'package:maadati/features/views/analis_page.dart';
 import 'package:maadati/features/views/overview_page.dart';
 import '../../../features/auth/presentation/view/auth_page.dart';
+import '../../../features/promoCode/presentation/view/promo_code_view.dart';
 
 class AppRoute{
 static const String auth = '/';
@@ -34,7 +35,7 @@ static Map<String,WidgetBuilder> routes = {
   orders: (context) => OrderPage(),
   promoCode: (context) =>PromoCodeView() ,
   reports:(context)=>ReportsPage(),
-  fees: (context) => FeePage(),
+  fees: (context) => FessPage(),
 //  dashboard:(context)=>DashboardPage(),
  // customers:(context)=>ClientPage(),
   //advertisement:(context)=>ProjectPage(),
@@ -46,5 +47,6 @@ static Map<String,WidgetBuilder> routes = {
   //settings:(context)=>ProjectPage(),
   // clientProfile:(context)=>ClientProfileDialog(client: client),
 };
+
 
 }
