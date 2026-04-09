@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class DioClient {
   final Dio dio = Dio();
@@ -10,7 +9,6 @@ class DioClient {
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          final prefs = await SharedPreferences.getInstance();
           final token = "1|o2DPf3OMgAs6uoXrvc69rcPCMAPATU6Tz4htJoEb6856278d";
 
           print("AUTO TOKEN => $token");

@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 
-class FeeEntity extends Equatable {
+class DriverFeeEntity extends Equatable {
   final int id;
   final String driverName;
   final double amount;
   final String date;
   final String status;
-  const FeeEntity({
+  const DriverFeeEntity({
     required this.id,
     required this.driverName,
     required this.status,

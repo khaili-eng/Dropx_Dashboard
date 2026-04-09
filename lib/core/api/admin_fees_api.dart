@@ -1,33 +1,51 @@
 import 'package:dio/dio.dart';
 import 'package:maadati/core/api/network/api_constants.dart';
-import 'package:maadati/features/admin_fees/data/model/admin_fee.dart';
+import 'package:maadati/core/utils/service_locator.dart';
 
 class AdminFeesApi {
   Dio dio = Dio();
-  final String baseUrl = ApiConstants.baseUrl;
+  DioClient() {
+    dio.options.baseUrl = "http://127.0.0.1:8000/api/admin/";
 
-  Future<List<FeeModel>> fetchAllOrders() async {
-    String myToken = ApiConstants.myToken;
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          final token = "1|o2DPf3OMgAs6uoXrvc69rcPCMAPATU6Tz4htJoEb6856278d";
 
-    try {
-      final response = await dio.get(
-        "$baseUrl/${ApiConstants.getAdminDailyEarningsFromRestaurants}",
-        options: Options(
-          headers: {
-            'Accept': 'application/json',
-            'Authorization': 'Bearer $myToken',
-          },
-        ),
-      );
+          print("AUTO TOKEN => $token");
 
-      if (response.statusCode == 200) {
-        List<dynamic> data = response.data['data'];
-        return data.map((json) => FeeModel.fromJson(json)).toList();
-      } else {
-        throw Exception("فشل في الوصول للسيرفر");
-      }
-    } on DioException catch (e) {
-      throw Exception("خطأ من السيرفر: ${e.response?.statusCode}");
-    }
+          options.headers["Accept"] = "application/json";
+
+          if (token.isNotEmpty) {
+            options.headers["Authorization"] = "Bearer $token";
+          }
+
+          return handler.next(options);
+        },
+      ),
+    );
   }
+}
+
+class AuthInterceptor extends Interceptor {
+  final String token;
+
+  AuthInterceptor(this.token);
+
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    options.headers['Authorization'] = 'Bearer $token';
+    options.headers['Accept'] = 'application/json';
+    super.onRequest(options, handler);
+  }
+}
+
+// في service_locator.dart عند تسجيل Dio
+// ignore: use_function_type_syntax_for_parameters
+void registerDioInstance() {
+  sl.registerLazySingleton<Dio>(() {
+    Dio dio = Dio();
+    dio.interceptors.add(AuthInterceptor(ApiConstants.myToken));
+    return dio;
+  });
 }
