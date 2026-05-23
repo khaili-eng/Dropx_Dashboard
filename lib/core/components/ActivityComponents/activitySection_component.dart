@@ -34,13 +34,11 @@ class ActivitySection extends StatelessWidget {
         ),
         const SizedBox(height: 20),
 
-        // لوحة الأنشطة
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: restaurants.take(4).length,
           itemBuilder: (context, index) {
-            // توزيع عشوائي لأنواع النشاط عشان يعطي شكل الداشبورد الحقيقي
             final List<Map<String, dynamic>> activityTypes = [
               {
                 "type": "Update",
